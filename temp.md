@@ -14,6 +14,8 @@
     - [普通](#普通)
     - [二逼](#二逼)
 - [数据结构](#数据结构)
+    - [笛卡尔树 && Treap 线性构造](#笛卡尔树--treap-线性构造)
+    - [std::list O(1) 合并](#stdlist-o1-合并)
     - [并查集 & 带权并查集](#并查集--带权并查集)
     - [数颜色](#数颜色)
         - [1.莫队 nsqrt(n)](#1莫队-nsqrtn)
@@ -150,6 +152,10 @@
     - [回文自动机(回文树)](#回文自动机回文树)
     - [Shift-And](#shift-and)
 - [数学 & 数论](#数学--数论)
+    - [二次剩余](#二次剩余)
+    - [斐波那契通项公式](#斐波那契通项公式)
+    - [等比求和](#等比求和)
+    - [等差求和](#等差求和)
     - [GCD & EXGCD](#gcd--exgcd)
         - [1.解方程 $ax+by=c$](#1解方程-axbyc)
     - [快速幂](#快速幂)
@@ -221,7 +227,9 @@
         - [普通](#普通-2)
         - [动态(点分树)](#动态点分树)
     - [二分图匹配](#二分图匹配)
-    - [二分图带权匹配(KM)](#二分图带权匹配km)
+    - [二分图最大权匹配(KM)](#二分图最大权匹配km)
+    - [一般图最大匹配(带花树)](#一般图最大匹配带花树)
+    - [一般图最大权匹配](#一般图最大权匹配)
     - [最大流](#最大流)
     - [费用流](#费用流)
         - [1. Dinic Bfs改最短路算法](#1-dinic-bfs改最短路算法)
@@ -455,6 +463,41 @@ struct IO {
 ```
 
 # 数据结构 #
+
+## 笛卡尔树 && Treap 线性构造
+
+```cpp
+int stk[MAXN],top,root;
+void build(int p[])
+{
+    top=0;
+    fp(i,0,n-1)
+    {
+        ls[i]=rs[i]=-1;if(d[i]==p[i]%10)continue;
+
+        while(top&&p[i]<p[stk[top]])ls[i]=stk[top--];
+        if(top)rs[stk[top]]=i;
+        stk[++top]=i;
+    }
+
+    if(!top)root=-1;
+    else root=stk[1];
+}
+```
+
+## std::list O(1) 合并
+
+stl 链表 O(1) 合并
+
+```cpp
+int work()
+{
+    list<int> l1,l2;
+    fp(i,1,100000)l1.push_back(i),l2.push_back(i);
+    l1.splice(l1.begin(),l2); //将 l2 接到 l1 后面 O(1)
+    return 0;
+}
+```
 
 ## 并查集 & 带权并查集 ##
 
@@ -5157,6 +5200,163 @@ int work()
 
 # 数学 & 数论 #
 
+## 二次剩余
+
+模意义下开根号 
+
+```cpp
+LL n,p,w;
+struct num {LL x, y;};
+num mul(num a, num b, LL p)
+{
+    num ans = {0, 0};
+    ans.x = ((a.x * b.x % p + a.y * b.y % p * w % p) % p + p) % p;
+    ans.y = ((a.x * b.y % p + a.y * b.x % p) % p + p) % p;
+    return ans;
+}
+LL binpow_real(LL a, LL b, LL p)
+{ 
+    LL ans = 1;
+    while (b)
+    {
+        if (b & 1) ans = ans * a % p;
+        a = a * a % p;
+        b >>= 1;
+    }
+    return ans % p;
+}
+LL binpow_imag(num a, LL b, LL p)
+{  
+    num ans = {1, 0};
+    while (b)
+    {
+        if (b & 1) ans = mul(ans, a, p);
+        a = mul(a, a, p);
+        b >>= 1;
+    }
+    return ans.x % p;
+}
+LL cipolla(LL n, LL p)
+{
+    n %= p;
+    if (p == 2) return n;
+    if (binpow_real(n, (p - 1) / 2, p) == p - 1) return -1;
+    LL a;
+    while (1)
+    { 
+        a = rand() % p;
+        w = ((a * a % p - n) % p + p) % p;
+        if (binpow_real(w, (p - 1) / 2, p) == p - 1) break;
+    }
+    num x = {a, 1};
+    return binpow_imag(x, (p + 1) / 2, p);
+}
+
+int work()
+{
+    srand(time(0));
+    MC
+    {
+        scanf("%lld%lld",&n,&p);
+        if(!n) printf("0\n");
+        else
+        {
+            LL ans1=cipolla(n,p),ans2=p-ans1;
+            if(ans1==-1)printf("Hola!\n");
+            else
+            {
+                if(ans1==ans2)printf("%lld\n",ans1);
+                else printf("%lld %lld\n",min(ans1,ans2),max(ans1,ans2));
+            }
+
+        }
+    }
+    return 0;
+}
+```
+
+## 斐波那契通项公式 ##
+
+$$
+a_n=\frac{1}{\sqrt{5}}[(\frac{\sqrt{5}+1}{2})^n-(\frac{\sqrt{5}-1}{2})^n]
+$$
+
+在模 $1e9+9$ 意义下有：
+
+$$\frac{1}{\sqrt{5}} = 383008016$$
+
+$$\frac{\sqrt{5}+1}{2} = 691504013$$
+
+$$\frac{\sqrt{5}-1}{2} = 308495997$$
+
+可以用来快速求 fib $k$ 次方之和
+
+```cpp
+const LL a = 691504013, b = 308495997, t = 383008016, MOD = 1e9+9;
+
+LL n; int k;
+LL f[MAXN],fi[MAXN],inv[MAXN];
+LL pa[MAXN],pb[MAXN];
+LL fpow(LL x,LL k)
+{
+    LL ans=1; x%=MOD;
+    while(k)
+    {
+        if(k&1)ans=ans*x%MOD;
+        x=x*x%MOD,k=k>>1;
+    }
+    return ans;
+}
+LL get_inv(LL x){return fpow(x,MOD-2);}
+LL C(int n,int m){return f[n]*fi[n-m]%MOD*fi[m]%MOD;}
+LL A(int n,int m){return f[n]*fi[n-m]%MOD;}
+void init(int n)
+{
+    f[0]=fi[0]=1;fp(i,1,n)f[i]=f[i-1]*i%MOD;
+    fi[n]=get_inv(f[n]);
+    fd(i,n-1,1)fi[i]=fi[i+1]*(i+1)%MOD;
+    fp(i,1,n)inv[i]=fi[i]*f[i-1]%MOD;
+}
+LL sum(LL a1, LL q, LL n)
+{
+    if(q==1)return n*a1%MOD;
+    return a1*(1-fpow(q,n))%MOD*get_inv(1-q)%MOD;
+}
+int work()
+{
+    init(1e5);
+    pa[0]=1;fp(i,1,1e5)pa[i]=pa[i-1]*a%MOD;
+    pb[0]=1;fp(i,1,1e5)pb[i]=pb[i-1]*b%MOD;
+    MC
+    {
+        scanf("%lld%d",&n,&k);
+        LL ans=0;
+        fp(j,0,k)
+            ans+=C(k,j)*sum(pa[k-j]*pb[j]%MOD,pa[k-j]*pb[j]%MOD,n)%MOD*((j&1)?-1:1),ans%=MOD;
+        ans*=fpow(get_inv(t),k),ans%=MOD,ans+=MOD,ans%=MOD;
+        printf("%lld\n",ans);
+    }
+    return 0;
+}
+```
+
+## 等比求和
+
+$$
+    q = 1, S_{n} = n*a_{1} 
+$$
+
+$$
+    q \neq 1, S_{n} = \frac{a_1(1-q^n)}{1-q}=\frac{a_1-a_{n}q}{1-q}
+$$
+
+## 等差求和
+
+$$
+    S_{n} = na_{1} + \frac{n(n-1)}{2}d = \frac{n(a_{1} + a_{n})}{2}
+$$
+
+
 ## GCD & EXGCD ##
 
 ```cpp
@@ -5892,7 +6092,7 @@ fp(i,1,n)
     while(l<=r)
     {
         if(calc(mid,s[h].se)>calc(mid,i))ans=mid,r=mid-1;
-        else l=mid+1;
+        else l=mid+1; 
     }
     s[++h]={ans,i};
 }
@@ -6058,7 +6258,7 @@ int work()
 
 $idom[u]$ 最近支配点，即每个点在支配树上的父亲
 
-$sdom[u]$ 半支配点，即从 v 点为起点在 dfs 树上不走树边可以到达 u 的 v 种 dfn 最小的点 
+$sdom[u]$ 半支配点，即从 v 点为起点在 dfs 树上不走树边可以到达 u 的 v 中 dfn 最小的点 
 
 ```cpp
 int n,m,root,tim;
@@ -6972,7 +7172,7 @@ int solve()
 }
 ```
 
-## 二分图带权匹配(KM) ##
+## 二分图最大权匹配(KM) ##
 
 $$O(N^3)$$
 
@@ -7024,6 +7224,84 @@ int work()
     return 0;
 }
 ```
+
+## 一般图最大匹配(带花树) ##
+
+```c
+EDGE(MAXN,MAXN*2);
+int n,m,ans,tim;
+int f[MAXN],nxt[MAXN],match[MAXN],vis[MAXN],dfn[MAXN];
+queue<int> q;
+int find(int x){return f[x]==x?x:f[x]=find(f[x]);}
+int lca(int u,int v)
+{
+    ++tim,u=find(u),v=find(v);
+    while(dfn[u]!=tim)
+    {
+        dfn[u]=tim;
+        u=find(nxt[match[u]]);
+        if(v)swap(u,v);
+    }
+    return u;
+}
+void blossom(int x,int y,int l)
+{
+    while(find(x)!=l)
+    {
+        nxt[x]=y,y=match[x];
+        if(vis[y]==2)vis[y]=1,q.push(y);
+        if(find(x)==x)f[x]=l;
+        if(find(y)==y)f[y]=l;
+        x=nxt[y];
+    }
+}
+bool aug(int S)
+{
+    fp(i,1,n)f[i]=i,vis[i]=nxt[i]=0;
+    while(!q.empty())q.pop();q.push(S),vis[S]=1;
+    while(!q.empty())
+    {
+        int u=q.front(); q.pop();
+        go(u)
+        {
+            if(find(u)==find(v)||vis[v]==2)continue;
+            if(!vis[v])
+            {
+                vis[v]=2,nxt[v]=u;
+                if(!match[v])
+                {
+                    for(int x=v,last;x;x=last)
+                        last=match[nxt[x]],match[x]=nxt[x],match[nxt[x]]=x;
+                    return 1;
+                }
+                vis[match[v]]=1,q.push(match[v]);
+            }
+            else
+            {
+                int l=lca(u,v);
+                blossom(u,v,l);
+                blossom(v,u,l);
+            }
+        }
+    }
+    return 0;
+}
+int work()
+{
+    scanf("%d%d",&n,&m);
+    fp(i,1,m)
+    {
+        int u,v;scanf("%d%d",&u,&v);
+        addedge(u,v),addedge(v,u);
+    }
+    fp(i,1,n)if(!match[i])ans+=aug(i);
+    printf("%d\n",ans);
+    fp(i,1,n)printf("%d ",match[i]);
+    return 0;
+}
+```
+
+## 一般图最大权匹配 ##
 
 ## 最大流 ##
 

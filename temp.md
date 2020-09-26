@@ -13,7 +13,9 @@
 - [读入挂](#读入挂)
     - [普通](#普通)
     - [二逼](#二逼)
+    - [fread](#fread)
 - [数据结构](#数据结构)
+    - [维护树上 dis(*，u) 之和](#维护树上-disu-之和)
     - [笛卡尔树 && Treap 线性构造](#笛卡尔树--treap-线性构造)
     - [std::list O(1) 合并](#stdlist-o1-合并)
     - [并查集 & 带权并查集](#并查集--带权并查集)
@@ -64,22 +66,27 @@
         - [LCT 维护虚子树信息](#lct-维护虚子树信息)
         - [LCT 维护树上路径信息](#lct-维护树上路径信息)
         - [LCT 维护同色联通块](#lct-维护同色联通块)
-    - [(待补)可并堆](#待补可并堆)
+    - [左偏树(可并堆)](#左偏树可并堆)
     - [单调栈 & 单调队列](#单调栈--单调队列)
     - [树链剖分](#树链剖分)
         - [1.重链剖分](#1重链剖分)
-        - [(待补)2.长链剖分](#待补2长链剖分)
-        - [3.dsu on tree](#3dsu-on-tree)
+        - [2.dsu on tree](#2dsu-on-tree)
     - [RMQ & 二维RMQ (ST表)](#rmq--二维rmq-st表)
         - [1.一维ST表](#1一维st表)
         - [2.二维ST表](#2二维st表)
     - [莫队](#莫队)
         - [带修莫队](#带修莫队)
         - [树上莫队](#树上莫队)
+        - [回滚莫队](#回滚莫队)
+            - [具体步骤](#具体步骤)
+            - [模板](#模板-2)
+        - [二次离线莫队](#二次离线莫队)
     - [分块](#分块)
+        - [询问分块](#询问分块)
         - [维护 ans=kx+y 的最大值(x,y常数且多个 k可变)](#维护-anskxy-的最大值xy常数且多个-k可变)
         - [值域分块](#值域分块)
     - [树分快](#树分快)
+        - [随即散点](#随即散点)
         - [王室联邦](#王室联邦)
         - [height分块](#height分块)
     - [CDQ分治](#cdq分治)
@@ -102,7 +109,7 @@
         - [高维询问/修改](#高维询问修改)
 - [字符串](#字符串)
     - [字符串哈希](#字符串哈希)
-        - [模板](#模板-2)
+        - [模板](#模板-3)
             - [1.自然溢出](#1自然溢出)
             - [2.二维矩阵hash](#2二维矩阵hash)
             - [3.双hash](#3双hash)
@@ -111,18 +118,18 @@
     - [树状数组维护字符串哈希](#树状数组维护字符串哈希)
     - [KMP](#kmp)
         - [资料](#资料-2)
-        - [模板](#模板-3)
+        - [模板](#模板-4)
         - [应用](#应用)
             - [1.求字符串的最小循环节](#1求字符串的最小循环节)
             - [2.求字符串 $S$ 每一个前缀在字符串 $T$ 中的出现次数](#2求字符串-s-每一个前缀在字符串-t-中的出现次数)
     - [扩展kmp](#扩展kmp)
         - [资料](#资料-3)
-        - [模板](#模板-4)
+        - [模板](#模板-5)
     - [字符串最小表示法](#字符串最小表示法)
         - [循环同构](#循环同构)
         - [最小表示](#最小表示)
         - [资料](#资料-4)
-        - [模板](#模板-5)
+        - [模板](#模板-6)
     - [manacher](#manacher)
     - [AC自动机](#ac自动机)
         - [1.求以文本串每个位置匹配的模式串个数](#1求以文本串每个位置匹配的模式串个数)
@@ -130,14 +137,14 @@
     - [后缀数组](#后缀数组)
         - [数组含义](#数组含义)
         - [性质](#性质)
-        - [模板](#模板-6)
+        - [模板](#模板-7)
         - [统计字符串中相同的子串的对数 或 字符串中每一对后缀的LCP之和](#统计字符串中相同的子串的对数-或-字符串中每一对后缀的lcp之和)
-            - [模板](#模板-7)
+            - [模板](#模板-8)
         - [字符串本质不同的子串个数](#字符串本质不同的子串个数)
     - [后缀自动机](#后缀自动机)
         - [资料](#资料-5)
         - [笔记](#笔记)
-        - [模板](#模板-8)
+        - [模板](#模板-9)
         - [技巧 & 应用](#技巧--应用)
             - [1.求 $endpos$ 集合的大小/最大值/最小值](#1求-endpos-集合的大小最大值最小值)
             - [2. $logn$ 查找某个子串在 $SAM$ 上对应的状态](#2-logn-查找某个子串在-sam-上对应的状态)
@@ -146,8 +153,9 @@
             - [5.最小表示法](#5最小表示法)
             - [6.字典序k大子串](#6字典序k大子串)
             - [7.多个串的LCS](#7多个串的lcs)
+            - [8.询问某一子串的后缀自动机](#8询问某一子串的后缀自动机)
     - [广义SAM](#广义sam)
-        - [模板](#模板-9)
+        - [模板](#模板-10)
         - [维护字符串在分组中的出现情况](#维护字符串在分组中的出现情况)
     - [回文自动机(回文树)](#回文自动机回文树)
     - [Shift-And](#shift-and)
@@ -166,7 +174,7 @@
     - [组合数预处理](#组合数预处理)
     - [FFT](#fft)
         - [资料](#资料-6)
-        - [模板](#模板-10)
+        - [模板](#模板-11)
             - [常规](#常规)
             - [卡常](#卡常)
     - [高斯消元](#高斯消元)
@@ -181,14 +189,17 @@
     - [线性基](#线性基)
         - [资料](#资料-7)
         - [性质](#性质-1)
-        - [模板](#模板-11)
+        - [模板](#模板-12)
             - [1.线性基求最大异或和](#1线性基求最大异或和)
             - [2.前缀线性基](#2前缀线性基)
 - [dp](#dp)
-    - [NlogN求LIS](#nlogn求lis)
-        - [模板](#模板-12)
-    - [数位DP 记忆化搜索](#数位dp-记忆化搜索)
+    - [树上背包上下界优化 O(nm)](#树上背包上下界优化-onm)
+        - [参考](#参考)
         - [模板](#模板-13)
+    - [NlogN求LIS](#nlogn求lis)
+        - [模板](#模板-14)
+    - [数位DP 记忆化搜索](#数位dp-记忆化搜索)
+        - [模板](#模板-15)
     - [子集枚举(SOS-DP)](#子集枚举sos-dp)
         - [O(3^n)](#o3^n)
         - [O(n*2^n)](#on2^n)
@@ -197,12 +208,13 @@
         - [不可离线](#不可离线)
     - [斜率优化](#斜率优化)
 - [图论](#图论)
+    - [树 hash](#树-hash)
     - [2-sat](#2-sat)
     - [支配树](#支配树)
     - [虚树](#虚树)
     - [Kruskal重构树](#kruskal重构树)
         - [资料](#资料-8)
-        - [模板](#模板-14)
+        - [模板](#模板-16)
         - [例题](#例题-1)
     - [传递闭包](#传递闭包)
     - [最小环](#最小环)
@@ -215,6 +227,10 @@
         - [3.无向图 点双缩点](#3无向图-点双缩点)
         - [4.无向图 边双缩点](#4无向图-边双缩点)
         - [5.有向图强连通分量缩点](#5有向图强连通分量缩点)
+    - [处理仙人掌](#处理仙人掌)
+        - [求环外分支大小](#求环外分支大小)
+        - [仙人掌最短路](#仙人掌最短路)
+        - [仙人掌直径](#仙人掌直径)
     - [树上 k 级祖先](#树上-k-级祖先)
         - [O(nlogn+qlogn) 在线](#onlognqlogn-在线)
         - [O(n+q) 离线](#onq-离线)
@@ -227,10 +243,12 @@
         - [普通](#普通-2)
         - [动态(点分树)](#动态点分树)
     - [二分图匹配](#二分图匹配)
+        - [最大流](#最大流)
+        - [匈牙利](#匈牙利)
     - [二分图最大权匹配(KM)](#二分图最大权匹配km)
     - [一般图最大匹配(带花树)](#一般图最大匹配带花树)
     - [一般图最大权匹配](#一般图最大权匹配)
-    - [最大流](#最大流)
+    - [最大流](#最大流-1)
     - [费用流](#费用流)
         - [1. Dinic Bfs改最短路算法](#1-dinic-bfs改最短路算法)
             - [Spfa](#spfa)
@@ -244,48 +262,47 @@
     - [最小圆覆盖](#最小圆覆盖)
     - [最小球覆盖](#最小球覆盖)
 - [其他](#其他)
+    - [模拟退火](#模拟退火)
+    - [unordered_map 防爆](#unordered_map-防爆)
     - [分数类](#分数类)
     - [mt19937](#mt19937)
     - [预处理log2](#预处理log2)
     - [基数排序](#基数排序)
-        - [模板](#模板-15)
+        - [模板](#模板-17)
     - [(待补)舞蹈链](#待补舞蹈链)
     - [动态二维数组](#动态二维数组)
-        - [模板](#模板-16)
+        - [模板](#模板-18)
     - [二分答案](#二分答案)
-        - [模板](#模板-17)
+        - [模板](#模板-19)
     - [三分](#三分)
     - [单调栈 最大子矩阵](#单调栈-最大子矩阵)
-        - [模板](#模板-18)
+        - [模板](#模板-20)
 
 <!-- /TOC -->
 
 # Head #
 
 ```cpp
-#include <bits/stdc++.h> 
-using namespace std;
+#include "bits/stdc++.h"
  
+using namespace std;
+   
 typedef unsigned long long ULL;
 typedef long long LL;
 typedef pair<int, int> pr;
 typedef pair<LL, LL> lpr;
 typedef pair<double, double> dpr;
 typedef pair<long double, long double> ldpr;
-//typedef complex<double> cp;
- 
-const int next_x[8] = {0, 1, -1, 0, 1, 1, -1, -1};
-const int next_y[8] = {1, 0, 0, -1, 1, -1, -1, 1};
-const int inf = 2147483647;//7;
-const LL linf = 1e18 + 5;
-const double PI = acos(-1.0);
- 
+typedef double db;
+typedef long double ld;
+// typedef complex<double> cp;
+// typedef pair<ld,ld> pt;
+   
 #define dbgs(x) #x << " = " << x
 #define dbgs2(x, y) dbgs(x) << ", " << dbgs(y)
 #define dbgs3(x, y, z) dbgs2(x, y) << ", " << dbgs(z)
 #define dbgs4(w, x, y, z) dbgs3(w, x, y) << ", " << dbgs(z)
- 
-#define heap priority_queue
+  
 #define mst(s, x) memset(s, x, sizeof(s))
 #define fi first
 #define se second
@@ -299,59 +316,82 @@ const double PI = acos(-1.0);
 #define rg register
 #define fp(i, a, b) for (rg int i = (a), I = (b) + 1; i < I; ++i)
 #define fd(i, a, b) for (rg int i = (a), I = (b)-1; i > I; --i)
-#define go(u) for (rg int i = pre[u], v = e[i].v; i; i = e[i].next, v = e[i].v)
-#define gow(u) for (rg LL i = pre[u], v = e[i].v, w = e[i].w; i; i = e[i].next, v = e[i].v, w = e[i].w)
-#define dbga(a, len)                       \
-    {                                      \
-        cout << #a << ": ";                \
-        fp(i, 1, len) cout << a[i] << " "; \
-        cout << endl;                      \
-    }
 #define ub upper_bound
 #define lb lower_bound
 #define bitcount __builtin_popcount
 #define sqr(x) ((x)*(x))
-//#define mid ((l + r) >> 1)
-
-const long double eps = 1e-12;
-const int MAXN = 200+2;
-const int N = 1e6;
-const int fix = 1e5;
+  
+#define go(u) for (rg int i = pre[u], v = e[i].v; i; i = e[i].next, v = e[i].v)
+#define gow(u) for (rg LL i = pre[u], v = e[i].v, w = e[i].w; i; i = e[i].next, v = e[i].v, w = e[i].w)
+#define EDGE(N,M) struct edge{int u,v,w,next;}e[M];int pre[N],edge_cnt=0;void addedge(int u,int v,int w=0){edge_cnt=edge_cnt+1,e[edge_cnt].u=u,e[edge_cnt].v=v,e[edge_cnt].w=w,e[edge_cnt].next=pre[u],pre[u]=edge_cnt;}
+#define CLEAR_EDGE(N) {edge_cnt=0,memset(pre,0,sizeof(int)*(N+1));}
+  
+#define MAXSIZE (1 << 20)
+#define isdigit(x) (x >= '0' && x <= '9')
+  
+#define MC int _CASE;scanf("%d",&_CASE);fp(case_num,1,_CASE)
+   
+const int next_x[8] = {0, 1, -1, 0, 1, 1, -1, -1};
+const int next_y[8] = {1, 0, 0, -1, 1, -1, -1, 1};
+const int inf = 1e9+5;//7;
+const LL linf = 1e18+5;
+const double PI = acos(-1.0);
+   
+const int MAXN = 81;
+const int N    = 2e6+5;
+const int fix  = 500*500+5;
  
-LL M = 1e9+7;
-const int K = 30;
+#define mid ((l+r)/2)
+#define ls (cnt<<1)
+#define rs (cnt<<1|1)
  
+// #define ls(x) ch[x][0]
+// #define rs(x) ch[x][1]
+    
 /*----------head----------*/
 
-int work(){}
+int work(){};
 
-// vector+lower_bound常数 < map/set
+// 小数 二分/三分 注意break条件
+// 浮点运算 sqrt(a^2-b^2) 可用 sqrt(a+b)*sqrt(a-b) 代替，避免精度问题
+// long double -> %Lf 别用C11 (C14/16)
+// 控制位数 cout << setprecision(10) << ans;
+// reverse vector 注意判空 不然会re
+// 分块注意维护块上标记 来更新块内数组a[]
+// vector+lower_bound常数 < map/set/(unordered_map)
 // map.find不会创建新元素 map[]会 注意空间
 // 别对指针用memset
-// 用位运算表示2^n注意加LL  1LL<<20
+// 用位运算表示2^n注意加LL 1LL<<20
 // 注意递归爆栈
 // 注意边界
-// 注意memset 多组样例会T
- 
+// 注意memset 多组会T
+   
 //#define ONLINE_JUDGE
  
 int main()
 {
-    //ios::sync_with_stdio(false);
-    //cin.tie(0);
+    // ios::sync_with_stdio(false);
+    // cin.tie(0);
 #ifdef ONLINE_JUDGE
-    //freopen("invazia.in", "r",stdin );
-    //freopen("invazia.out","w",stdout);
+    // freopen("triatrip.in", "r",stdin );
+    // freopen("triatrip.out","w",stdout);
 #endif // ONLINE_JUDGE
 #ifndef ONLINE_JUDGE
+    // gcc 本地扩栈
+    int size = 512 << 20; // 512MB  
+    char *p = (char*)malloc(size) + size;  
+    __asm__("movl %0, %%esp\n" :: "r"(p)); 
     freopen("input.txt", "r", stdin);
-    //freopen("output.txt", "w", stdout);
+    // freopen("output.txt", "w", stdout);
 #endif
+    // make();
     work();
 #ifndef ONLINE_JUDGE
+    cout << "time:" << clock() << "ms" << endl;
     freopen("CON", "r", stdin);
-    fflush(stdout);
+    freopen("CON", "w", stdout);
     system("pause");
+    fflush(stdout);
 #endif
     return 0;
 }
@@ -462,7 +502,35 @@ struct IO {
 } io;
 ```
 
+## fread ## 
+
+```cpp
+char ibuf[40000000], *ih = ibuf, obuf[15000000], *oh = obuf;
+inline void read( int &x ) //fread(ibuf,1,40000000,stdin);
+{
+	int f=1;
+	for (; !isdigit( *ih ); ++ih )if(*ih == '-') f=-1;
+	for ( x = 0; isdigit( *ih ); x = x * 10 + *ih++ - 48 );
+    x*=f;
+}
+inline void out( LL x ) // fwrite( obuf, 1, oh - obuf, stdout );
+{
+	if ( !x ){*oh++ = '0'; return;}
+    if(x<0)*oh++='-',x=-x;
+	static int buf[30]; int xb = 0;
+	for (; x; x /= 10 )
+		buf[++xb] = x % 10;
+	for (; xb; )
+		*oh++ = buf[xb--] | 48;
+}
+```
+
 # 数据结构 #
+
+## 维护树上 dis(*，u) 之和
+
+$dis(u,v) = d[u] + d[v] - d[lca(u,v)]$，考虑维护所有点对的 $lca$ 之和，加入一个点对它到根节点的链区间加，询问 $dis(*,u)$ 时对 $u$ 到根节点的链求和即为 $d[lca(u,v)]$ 之和。
+
 
 ## 笛卡尔树 && Treap 线性构造
 
@@ -1863,7 +1931,7 @@ void link(int x,int y){makeroot(x);if(findroot(y)==x)return;fa[x]=y,access(x);}
 void cutfa(int x){access(x),splay(x);fa[ls(x)]=0,ls(x)=0,pushup(x);}
 void cut(int x,int y){makeroot(x),access(y),splay(y);if(ls(y)!=x)return;cutfa(y);}
 void change(int x,int v){splay(x),val[x]=v;}
-void query(int x,int y){makeroot(x),access(y),splay(y);printf("%d\n",sum[y]);}
+void query(int x,int y){makeroot(x),access(y),splay(y);printf("%d\n",sum[y]);} //别忘记splay
 ```
 
 用法总结参考自：
@@ -1932,9 +2000,46 @@ inline void link(int x,int y)
 
 ### LCT 维护同色联通块
 
+## 左偏树(可并堆) ##
 
-
-## (待补)可并堆 ##
+```cpp
+int n,m,v;
+struct {int dis,val,ch[2],rt;}t[MAXN];
+int find(int x){return t[x].rt==x?x:t[x].rt=find(t[x].rt);}
+int merge(int x,int y)
+{
+    if(x*y==0)return x+y;
+    if((t[x].val>t[y].val)||(t[x].val==t[y].val&&x>y))swap(x,y);
+    rs=merge(rs,y);
+    if(t[ls].dis<t[rs].dis)swap(ls,rs);
+    t[x].dis=t[rs].dis+1,t[ls].rt=t[rs].rt=x;
+    return x;
+}
+void pop(int x){t[x].val=-1,t[ls].rt=ls,t[rs].rt=rs,t[x].rt=merge(ls,rs);}
+int work()
+{
+    scanf("%d%d",&n,&m),t[0].dis=-1;
+    fp(i,1,n)scanf("%d",&v),t[i].rt=i,t[i].val=v;
+    fp(i,1,m)
+    {
+        int opt,x,y;scanf("%d",&opt);
+        if(opt==1)
+        {
+            scanf("%d%d",&x,&y);
+            if(t[x].val==-1||t[y].val==-1)continue;
+            x=find(x),y=find(y);
+            if(x!=y)t[x].rt=t[y].rt=merge(x,y);
+        }
+        if(opt==2)
+        {
+            scanf("%d",&x);
+            if(t[x].val==-1)puts("-1");
+            else x=find(x),printf("%d\n",t[x].val),pop(x);
+        }
+    }
+    return 0;
+}
+```
 
 ## 单调栈 & 单调队列 ##
 
@@ -2033,9 +2138,7 @@ int work()
 }
 ```
 
-### (待补)2.长链剖分 ###
-
-### 3.dsu on tree ###
+### 2.dsu on tree ###
 
 树上启发式合并
 用来解决一类子树询问问题
@@ -2347,9 +2450,213 @@ int work()
 }
 ```
 
+### 回滚莫队 ###
+
+#### 具体步骤
+
+1. 对询问离线并排序，以左端点所在块号为第一关键字，右端点大小为第二关键字进行排序
+
+2. 以块号递增的顺序处理询问，每次只考虑左端点在该块内的询问
+
+3. 暴力回答所有左右端点都在块内的询问 
+
+4. 记当前块号为 $k$，区间为 $[st[k],ed[k]]$，考虑剩下的询问，显然询问的右端点都大于 $ed[k]$ 并且递增
+
+5. 记当前已求得答案的区间为 $[l,r]$，答案为 $pre$，若该询问是该块内的第一次询问则初始化区间为 $[l=ed[k]+1, r=ed[k]]$
+
+6. 扩展 $r$ 至当前询问的右边界，并更新答案 $pre$
+
+7. 建立临时变量 $ans=pre$，扩展 $l$ 至当前询问的左边界，并更新答案 $ans$，扩展完毕后用 $ans$ 回答当前询问
+
+8. 回撤左端点 $l$ 至 $ed[k]+1$，并**撤销扩展 $l$ 时对辅助变量的更改**，保留 $pre$ 用于下次询问（即回撤区间至 $[ed[k],r]$）
+
+这样我们就实现了区间只增不减的莫队，步骤 8 中撤销左边界的具体实现视所用辅助变量而定，例如桶的话就 $cnt[value]--$，并查集的话用按秩合以支持撤销操作。
+
+分析下复杂度，假定 $n$ 和 $m$ 同数量级，取块大小 $B = \sqrt{n}$，暴力处理块内询问 $O(\sqrt{n})$，每个块内右端点至多扩展 $n$ 次 $O(n\sqrt{n})$，左端点每次最多扩展和撤销 $\sqrt{n}$ 次，因此总复杂度仍为 $O(n\sqrt{n})$。
+
+#### 模板
+
+[AtCoder1219 历史研究](https://www.luogu.com.cn/problem/AT1219)
+
+扩展右端点：`cnt[x]++,pre=max(pre,cnt[x]*x)`
+
+扩展右端点：`cnt[x]++,ans=max(ans,cnt[x]*x)`
+
+回撤左端点：`cnt[x]--`
+
+```cpp
+const int SZ = sqrt(MAXN);
+vector<int> X;
+int n,m,z;
+int a[MAXN],b[MAXN],cnt[MAXN],id[MAXN],st[MAXN],ed[MAXN],t[MAXN];
+struct query
+{
+    int l,r,i; LL ans;
+    bool operator <(const query &t)const
+    {
+        if(id[t.l]!=id[l])return id[l]<id[t.l];
+        return r<t.r;
+    }
+}q[MAXN];
+inline LL baoli(int l,int r)
+{
+    LL ans=0;
+    fp(i,l,r)t[b[i]]++,ans=max(ans,1LL*t[b[i]]*a[i]);
+    fp(i,l,r)t[b[i]]--;
+    return ans;
+}
+int work()
+{
+    scanf("%d%d",&n,&m);
+    fp(i,1,n)scanf("%d",&a[i]),X.pb(a[i]);
+    fp(i,1,n)id[i]=(i-1)/SZ+1; z=id[n];
+    fp(i,1,n)if(!st[id[i]])st[id[i]]=i;
+    fd(i,n,1)if(!ed[id[i]])ed[id[i]]=i;
+    sort(all(X)),unq(X);
+    fp(i,1,n)b[i]=lb(all(X),a[i])-X.begin()+1;
+    fp(i,1,m)scanf("%d%d",&q[i].l,&q[i].r),q[i].i=i;
+    sort(q+1,q+1+m);
+    LL ans=0,pre=0;
+    for(int i=1,l,r;i<=m;i++)
+    {   
+        int k=id[q[i].l];
+        if(id[q[i].l]!=id[q[i-1].l])mst(cnt,0),ans=pre=0,r=ed[k],l=ed[k]+1;
+        if(id[q[i].l]==id[q[i].r])q[i].ans=baoli(q[i].l,q[i].r);
+        else
+        {
+            while(l<=ed[k])cnt[b[l]]--,l++;
+            while(r<q[i].r)r++,cnt[b[r]]++,pre=max(pre,1LL*cnt[b[r]]*a[r]);
+            ans=pre;
+            while(l>q[i].l)l--,cnt[b[l]]++,ans=max(ans,1LL*cnt[b[l]]*a[l]);
+            q[i].ans=ans;
+        }
+    }
+    sort(q+1,q+1+m,[](const query &a,const query &b){return a.i<b.i;});
+    fp(i,1,m)printf("%lld\n",q[i].ans);
+    return 0;
+}
+```
+
+### 二次离线莫队 ###
+
+求区间内满足某性质的 $pair$ 数可以考虑
+
+```cpp
+const int SZ = sqrt(MAXN);
+int n,m,k;
+int a[MAXN];
+int sa[MAXN],pa[MAXN],cnt[16384*8];
+LL  res[MAXN],ans[MAXN];
+inline int id(int x){return (x-1)/SZ+1;}
+struct q1
+{
+    int l,r,i;
+    bool operator <(const q1 &t)const
+    {
+        if(id(l)!=id(t.l))return id(l)<id(t.l);
+        if(id(l)&1)return r<t.r;
+        return r>t.r;
+    }
+}q[MAXN];
+struct q2{int i,l,r,f;};
+vector<q2> pre[MAXN],suf[MAXN];
+vector<int> b;
+inline void insert_pre(int i,int pos,int l,int r,int f){if(pos>=1&&pos<=n)pre[pos].pb({i,l,r,f});}
+inline void insert_suf(int i,int pos,int l,int r,int f){if(pos>=1&&pos<=n)suf[pos].pb({i,l,r,f});}
+int work()
+{
+    io.read(n),io.read(m),io.read(k);
+    fp(i,1,n)io.read(a[i]);
+    fp(i,0,16384)if(bitcount(i)==k)b.pb(i);
+    fp(i,1,m)io.read(q[i].l),io.read(q[i].r),q[i].i=i;
+    sort(q+1,q+1+m);
+    rg int r=1,l=0;
+    fp(i,1,m)
+    {
+        if(r<q[i].r){insert_pre(i,l-1,r+1,q[i].r,-1);while(r<q[i].r)++r,res[i]+=pa[r];}
+        if(l>q[i].l){insert_suf(i,r+1,q[i].l,l-1,-1);while(l>q[i].l)--l,res[i]+=sa[l];}
+        if(r>q[i].r){insert_pre(i,l-1,q[i].r+1,r, 1);while(r>q[i].r)res[i]-=pa[r],--r;}
+        if(l<q[i].l){insert_suf(i,r+1,l,q[i].l-1, 1);while(l<q[i].l)res[i]-=sa[l],++l;}
+    }
+    fp(i,1,n)
+    {
+        pa[i]=cnt[a[i]];
+        for(auto x:b)cnt[a[i]^x]++;
+        for(auto q:pre[i])fp(j,q.l,q.r)if(j)res[q.i]+=q.f*cnt[a[j]];
+    }
+    mst(cnt,0);
+    fd(i,n,1)
+    {
+        sa[i]=cnt[a[i]];
+        for(auto x:b)cnt[a[i]^x]++;
+        for(auto q:suf[i])fp(j,q.l,q.r)if(j)res[q.i]+=q.f*cnt[a[j]];
+    }
+    r=1,l=0;
+    fp(i,1,m)
+    {
+        if(r<q[i].r){while(r<q[i].r)++r,res[i]+=pa[r];}
+        if(l>q[i].l){while(l>q[i].l)--l,res[i]+=sa[l];}
+        if(r>q[i].r){while(r>q[i].r)res[i]-=pa[r],--r;}
+        if(l<q[i].l){while(l<q[i].l)res[i]-=sa[l],++l;}
+    }
+    fp(i,1,m)res[i]+=res[i-1],ans[q[i].i]=res[i];
+    fp(i,1,m)io.write(ans[i]),io.push('\n');
+    return 0;
+}
+```
+
+
 ## 分块 ##
 
+### 询问分块 ### 
 
+区间加，区间求值：
+
+考虑对询问分块，维护前缀和，每 $\sqrt{n}$ 次修改便重建前缀数组，询问时暴力查询当前维护的修改对本次询问的影响。
+
+```cpp
+int n;
+LL  a[MAXN],b[MAXN];
+struct modify{int l,r;LL v;};
+vector<modify> v;
+void build()
+{
+    mst(b,0);
+    for(auto x:v)b[x.l]+=x.v,b[x.r+1]-=x.v;
+    v.clear();
+    fp(i,1,n)b[i]+=b[i-1];
+    fp(i,1,n)b[i]+=b[i-1];
+    fp(i,1,n)a[i]+=b[i];
+}
+pr inter(int a,int b,int c,int d)
+{
+    if(b<c||a>d)return {0,0};
+    return {max(a,c),min(b,d)};
+}
+void query(int l,int r,int MOD)
+{
+    LL ans=a[r]-a[l-1];
+    for(auto x:v)
+    {
+        pr seg=inter(x.l,x.r,l,r);
+        if(seg.fi)ans+=1LL*(seg.se-seg.fi+1)*x.v,ans%=(MOD+1);
+    }
+    ans%=(MOD+1),printf("%lld\n",ans);
+}
+int work()
+{
+    scanf("%d",&n);
+    fp(i,1,n)scanf("%lld",&a[i]),a[i]+=a[i-1];
+    fp(i,1,n)
+    {
+        int t,l,r,c;scanf("%d%d%d%d",&t,&l,&r,&c);
+        if(!t){v.pb({l,r,c});if(v.size()>=sqrt(n))build();}
+        else query(l,r,c);
+    }
+    return 0;
+}
+```
+ 
 ### 维护 ans=kx+y 的最大值(x,y常数且多个 k可变) ###
 
 将 (a,b) 看作是平面上的点 
@@ -2542,6 +2849,11 @@ inline int work()
 $O(1)$修改，$O(sqrt(n))$查询，有时可用于莫队
 
 ##  树分快
+
+
+### 随即散点
+
+从一个关键点跳到另一个关键点期望距离 $\sqrt{n}$
 
 ### 王室联邦
 
@@ -4820,6 +5132,151 @@ void solve()
     cout << L << endl;
 }
 ```
+
+#### 8.询问某一子串的后缀自动机 ####
+
+考虑用线段树合并维护 $right$ 集合，询问一个节点是否在子串 $[L,R]$ 构成的后缀自动机上可以通过查询节点的 $right$ 集合是否在区间 $[L+len,R]$ 中有值，其中 $len$ 为当前匹配长度。
+
+[[NOI2018]你的名字](https://www.luogu.com.cn/problem/P4770)
+```cpp
+namespace seg
+{
+    int cnt,s[N],ls[N],rs[N];
+    int query(int x,int l,int r,int nl,int nr)
+    {
+        if(!x||nl>nr||nr<l||nl>r)return 0;
+        if(l==nl&&r==nr)return s[x];
+        if(nr<=mid)return query(ls[x],l,mid,nl,nr);
+        if(nl> mid)return query(rs[x],mid+1,r,nl,nr);
+        return query(ls[x],l,mid,nl,mid)+query(rs[x],mid+1,r,mid+1,nr);
+    }
+    void insert(int &x,int l,int r,int pos)
+    {
+        if(!x)x=++cnt; s[x]++; if(l==r)return;
+        if(pos<=mid)insert(ls[x],l,mid,pos);
+        else insert(rs[x],mid+1,r,pos);
+    }
+    int merge(int x,int y,int l,int r)
+    {
+        if(!x||!y)return x+y; int cur=++cnt;
+        if(l==r)s[cur]=s[x]+s[y];
+        else
+        {
+            ls[cur]=merge(ls[x],ls[y],l,mid);
+            rs[cur]=merge(rs[x],rs[y],mid+1,r);
+            s[cur]=s[ls[cur]]+s[rs[cur]];
+        }
+        return cur;
+    }
+}
+template<int N>
+struct SAM
+{
+    int root,cnt,last;
+    int nx[N][26],par[N],len[N];
+    int rt[N],mx[N],buc[N],seq[N];
+    int newnode()
+    {
+        cnt++;
+        mst(nx[cnt],0);
+        par[cnt]=len[cnt]=rt[cnt]=mx[cnt]=0;    
+        return cnt;
+    }
+    void init(){cnt=0,last=root=newnode();}
+    void insert(int c)
+    {
+        int np=newnode(),p=last;
+        len[np]=len[last]+1;
+        while(p&&!nx[p][c])nx[p][c]=np,p=par[p];
+        if(p)
+        {
+            int q=nx[p][c];
+            if(len[q]==len[p]+1)par[np]=q;
+            else
+            {
+                int nq=newnode();
+                len[nq]=len[p]+1;
+                par[nq]=par[q];
+                memcpy(nx[nq],nx[q],sizeof(nx[q]));
+                while(p&&nx[p][c]==q)nx[p][c]=nq,p=par[p];
+                par[q]=par[np]=nq;
+            }
+        }
+        else par[np]=root;
+        last=np;
+    }
+    void sort()
+    {
+        int mx=0;
+        fp(i,1,cnt)buc[len[i]]++,mx=max(mx,len[i]);
+        fp(i,1,mx)buc[i]+=buc[i-1];
+        fp(i,1,cnt)seq[buc[len[i]]--]=i;
+        fp(i,0,mx)buc[i]=0;
+    }
+    void build(char s[])
+    {
+        init();
+        int n=strlen(s+1);
+        fp(i,1,n)insert(s[i]-'a');
+    }
+    void build_mx(char s[])
+    {
+        int n=strlen(s+1),cur=root;
+        fp(i,1,n)cur=nx[cur][s[i]-'a'],mx[cur]=i;
+        sort();
+        fd(i,cnt,1)
+        {
+            int x=seq[i];
+            if(par[x])mx[par[x]]=max(mx[par[x]],mx[x]);
+        }
+    }
+    void build_right(char s[])
+    {
+        int n=strlen(s+1),cur=root;
+        fp(i,1,n)cur=nx[cur][s[i]-'a'],seg::insert(rt[cur],1,n,i);
+        sort();
+        fd(i,cnt,1)
+        {
+            int x=seq[i];
+            if(par[x])rt[par[x]]=seg::merge(rt[par[x]],rt[x],1,n);
+        }
+    }
+    void move(int &l,int &cur,int n,int L,int R,int c)
+    {
+        while(1)
+        {
+            if(nx[cur][c]&&seg::query(rt[nx[cur][c]],1,n,L+l,R)>0)
+                {cur=nx[cur][c],l++;return;}
+            if(!l)return;
+            if(--l==len[par[cur]])cur=par[cur];
+        }
+    }
+    LL calc(int p[],LL ans=0)
+    {
+        fp(i,2,cnt)
+            ans+=max(0,len[i]-max(len[par[i]],p[mx[i]]));
+        return ans;
+    }
+};
+int n,m,L,R;
+char s[MAXN],t[MAXN];
+int  p[MAXN];
+SAM<1000005> S;
+SAM<2000005> T;
+int work()
+{
+    scanf("%s",s+1),n=strlen(s+1),S.build(s),S.build_right(s);
+    MC
+    {
+        scanf("%s %d %d",t+1,&L,&R),m=strlen(t+1),T.build(t),T.build_mx(t);
+        int cur=S.root,l=0;
+        fp(i,1,m)S.move(l,cur,n,L,R,t[i]-'a'),p[i]=l;
+        printf("%lld\n", T.calc(p));
+    }
+    return 0;
+}
+```
+
 ## 广义SAM ##
 
 将 $SAM$ 推广到字典树上的产物，目前不太理解，，，
@@ -4948,7 +5405,7 @@ set + 启发式合并 o(nlognlogn)
 
 [多个串的LCS](https://www.luogu.com.cn/problem/SP10570)
 
-```c
+```cpp
 const int K = 26;
 int n,ans;
 char s[MAXN];
@@ -5914,6 +6371,54 @@ int query(int l,int r)
 
 # dp #
 
+## 树上背包上下界优化 O(nm) ##
+
+### 参考 ###
+
+[树上背包的上下界优化 ouuan](https://www.cnblogs.com/ouuan/p/BackpackOnTree.html)
+
+### 模板 ###
+
+[Nowcoder 蓝魔法师](https://ac.nowcoder.com/acm/contest/6895/A)
+
+```cpp
+const LL MOD = 998244353;
+EDGE(MAXN,MAXN*2);
+int n,k;
+LL  f[MAXN][MAXN],s[MAXN],g[MAXN];
+int sz[MAXN];
+void dfs(int u,int fa) 
+{   
+    f[u][1]=sz[u]=1;
+    go(u)if(v!=fa)
+    {
+        dfs(v,u),mst(g,0);
+        fp(i,1,min(k,sz[u]))
+        {
+            fp(j,1,min(k-i,sz[v]))
+                g[i+j]+=f[u][i]*f[v][j]%MOD,g[i+j]%=MOD;
+            g[i]+=f[u][i]*s[v]%MOD,g[i]%=MOD;
+        }
+        fp(i,1,k)f[u][i]=g[i];
+        sz[u]+=sz[v];
+    }
+    fp(i,1,k)s[u]+=f[u][i],s[u]%=MOD;
+}
+int work()
+{
+    scanf("%d%d",&n,&k);
+    fp(i,1,n-1)
+    {
+        int u,v;scanf("%d%d",&u,&v);
+        addedge(u,v),addedge(v,u);
+    }
+    dfs(1,0);
+    LL ans=0;
+    fp(i,1,k)ans+=f[1][i],ans%=MOD;
+    return printf("%lld\n",ans);
+}
+```
+
 ## NlogN求LIS ##
 
 ### 模板 ### 
@@ -6111,6 +6616,31 @@ $x$ 单调 $k$ 不单调 -> 单调队列上二分
 $x$ 不单调 -> 平衡树(请)
 
 # 图论 #
+
+## 树 hash ##
+
+```cpp
+ULL seed = 13331;
+int n;
+int sz[MAXN];
+ULL f[MAXN],p[MAXN];
+vector<int> G[MAXN];
+void dfs(int u,int fa)
+{
+    vector<int> ve; sz[u]=1;
+    for(auto v:G[u])if(v!=fa)dfs(v,u),sz[u]+=sz[v],ve.pb(v);
+    sort(all(ve),[](int u,int v){return f[u]<f[v];});
+    for(int i=0;i<ve.size();i++)
+    {
+        int v=ve[i];
+        f[u]+=f[v]*p[i];
+    }
+    f[u]*=sz[u];
+    if(sz[u]==1)f[u]=1; // 叶子
+    // cout << dbgs2(u,f[u]) << endl;
+}
+void init(){p[0]=1;fp(i,1,MAXN-1)p[i]=p[i-1]*seed;}
+```
 
 ## 2-sat ##
 
@@ -6884,6 +7414,284 @@ void solve()
 }
 ```
 
+## 处理仙人掌
+
+仙人掌找环：
+
+```cpp
+void build()
+{
+    if(a.size()==2) //树边
+    {
+        ...
+    }
+    else //环
+    {
+        ...
+    }
+}
+void tarjan(int u,int fa)
+{
+    low[u]=dfn[u]=++tim,s.pb(u);
+    for(auto e:G1[u])
+    {
+        int v=e.fi;
+        if(v!=fa)
+        {
+            if(!dfn[v])
+            {
+                tarjan(v,u),low[u]=min(low[u],low[v]);
+                if(low[v]>=dfn[u])
+                {
+                    a.clear(); while(!s.empty()&&s.back()!=v)a.pb(s.back()),s.ppb();
+                    a.pb(s.back()),s.ppb(),a.pb(u),reverse(all(a)),build();
+                }
+            }
+            else low[u]=min(low[u],dfn[v]);
+        }
+    }
+}
+```
+
+### 求环外分支大小
+```cpp
+int n,m,tim;
+int dfn[MAXN],low[MAXN],sz[MAXN];
+LL ans=0;
+EDGE(MAXN,MAXN*2);
+vector<int> s,a;
+void solve(vector<int> &a)
+{
+    if(a.size()==2)return void(ans=(ans+1LL*a[0]*a[1]%MOD)%MOD); // 树边
+    // 环边    
+    int len=a.size(); LL s=0,sj=0,sjj=0,ans=0; 
+    fp(i,0,a.size()-1)
+    {
+        LL si=a[i];
+
+        ans+=si*i%MOD*len%MOD*s%MOD,ans%=MOD;
+        ans-=si*i%MOD*i%MOD*s%MOD,ans%=MOD;
+        ans+=si*i%MOD*sj%MOD,ans%=MOD;
+        ans-=si*len%MOD*sj%MOD,ans%=MOD;
+        ans+=si*i%MOD*sj%MOD,ans%=MOD;
+        ans-=si*sjj%MOD,ans%=MOD;
+        
+        s+=si,sj+=si*i%MOD,sjj+=si*i%MOD*i%MOD,s%=MOD,sj%=MOD,sjj%=MOD;
+    }
+    ans*=inv(len),ans%=MOD,::ans+=ans,::ans%=MOD; return;
+}
+void dfs(int u,int fa)
+{
+    low[u]=dfn[u]=++tim,sz[u]=1,s.pb(u);
+    go(u)if(v!=fa)
+    {
+        if(!dfn[v])
+        {
+            dfs(v,u),low[u]=min(low[u],low[v]);
+            if(low[v]>=dfn[u])
+            {
+                a.clear(); int left=n;
+                while(!s.empty()&&s.back()!=v)
+                    sz[u]+=sz[s.back()],
+                    a.pb(sz[s.back()]), // a.pb(s.back()),
+                    left-=sz[s.back()],
+                    s.ppb();
+                
+                sz[u]+=sz[s.back()],
+                a.pb(sz[s.back()]), // a.pb(s.back()),
+                left-=sz[s.back()],
+                s.ppb();
+
+                a.pb(left), // a.pb(u),
+                solve(a);
+            }
+        }
+        else low[u]=min(low[u],dfn[v]);
+    }
+}
+int work()
+{
+    MC
+    {
+        scanf("%d%d",&n,&m);
+        edge_cnt=tim=ans=0,mst(pre,0),mst(dfn,0),mst(low,0),s.clear();
+        fp(i,1,m)
+        {
+            int u,v;scanf("%d%d",&u,&v);
+            addedge(u,v),addedge(v,u);
+        }
+        dfs(1,0),printf("%lld\n",(ans%MOD+MOD)%MOD);
+    }
+    return 0;
+}
+```
+
+### 仙人掌最短路
+
+考虑将仙人掌缩成(有根)园方树，原点到原点的边权不变，原点到方点的距离为0，方点 $u$ 到原点 $v$ 的距离为环上 $v$ 到 $fa[u]$ 的最短路。
+
+求两点最短路首先求lca，若lca是原点则直接输出距离，若是方点则输出 dis(tu,u)+dis(tv,v)+(u,v)两点在环上的最短路距离。
+
+```cpp
+int n,m,q,tim,sz;
+vector<pr> G1[MAXN],G2[MAXN];
+map<pr,int> weight;
+unordered_map<int,int> pos[MAXN];
+int f[MAXN][25],low[MAXN],dfn[MAXN],sum[MAXN],d[MAXN],h[MAXN];
+vector<int> s,a,pre[MAXN];
+int dis(int u,int v){return weight[{min(u,v),max(u,v)}];}
+void addedge(int u,int v,int w,vector<pr> G[MAXN]){G[u].pb({v,w}),G[v].pb({u,w});}
+void build()
+{
+    if(a.size()==2)return addedge(a[0],a[1],dis(a[0],a[1]),G2);
+    ++n,pre[n].resize(a.size());
+    fp(i,1,pre[n].size()-1)
+    {
+        int d=dis(a[i],a[i-1]);
+        pre[n][i]=pre[n][i-1]+d;
+        sum[n]+=d;
+    }
+    sum[n]+=dis(a[0],a.back());
+    fp(i,1,a.size()-1)
+        addedge(n,a[i],min(pre[n][i],sum[n]-pre[n][i]),G2);    
+    addedge(a[0],n,0,G2);
+    fp(i,0,a.size()-1)pos[n][a[i]]=pre[n][i];
+}
+void tarjan(int u,int fa)
+{
+    low[u]=dfn[u]=++tim,s.pb(u);
+    for(auto e:G1[u])
+    {
+        int v=e.fi;
+        if(v!=fa)
+        {
+            if(!dfn[v])
+            {
+                tarjan(v,u),low[u]=min(low[u],low[v]);
+                if(low[v]>=dfn[u])
+                {
+                    a.clear(); while(!s.empty()&&s.back()!=v)a.pb(s.back()),s.ppb();
+                    a.pb(s.back()),s.ppb(),a.pb(u),reverse(all(a)),build();
+                }
+            }
+            else low[u]=min(low[u],dfn[v]);
+        }
+    }
+}
+void dfs(int u,int par)
+{
+    f[u][0]=par,h[u]=h[par]+1;
+    for(auto e:G2[u])
+    {
+        int v=e.fi,w=e.se;
+        if(v!=par)
+        {
+            d[v]=d[u]+w,dfs(v,u);
+        }
+    }
+}
+int dis(int u,int v,int sq)
+{
+    int d=abs(pos[sq][u]-pos[sq][v]);
+    return min(d,sum[sq]-d);
+}
+int query(int u,int v)
+{
+    int tu=u,tv=v; if(h[u]<h[v]) swap(u,v),swap(tu,tv);
+    for(int k=log2(h[u])+1;k>=0;k--)
+        if(h[f[u][k]]>=h[v])
+            u=f[u][k];
+    if(u==v) return d[tu]-d[tv];
+    for(int k=log2(h[u])+1;k>=0;k--)
+        if(f[u][k]!=f[v][k])
+            u=f[u][k],v=f[v][k];
+    int l=f[u][0];
+    if(l<=sz)return d[tu]+d[tv]-2*d[l];
+    return d[tu]-d[u]+d[tv]-d[v]+dis(u,v,f[u][0]);
+}
+int work()
+{
+    scanf("%d%d%d",&n,&m,&q),sz=n;
+    fp(i,1,m)
+    {
+        int u,v,w;scanf("%d%d%d",&u,&v,&w);
+        if(u>v)swap(u,v);addedge(u,v,w,G1),weight[{u,v}]=w;
+    }
+    tarjan(1,0),dfs(1,0);
+    for(int k=1;k<=20;k++)
+        for(int i=1;i<=n;i++)
+            f[i][k]=f[f[i][k-1]][k-1];
+    while(q--)
+    {
+        int u,v;scanf("%d%d",&u,&v);
+        printf("%d\n",query(u,v));
+    }
+    return 0;
+}
+```
+
+### 仙人掌直径
+
+定义仙人掌上两点距离为他们之间的最短路，求仙人掌的直径
+```cpp
+EDGE(MAXN,N*2);
+int n,m,tim,ans=0;
+int low[MAXN],dfn[MAXN],f[MAXN],t[MAXN];
+vector<int> a,s;
+void solve()
+{
+    if(a.size()==2)
+    {
+        ans=max(ans,f[a[0]]+f[a[1]]+1);
+        f[a[0]]=max(f[a[0]],f[a[1]]+1);
+        return;
+    }
+    int len=a.size();
+    fp(i,0,len-1)a.pb(a[i]);
+    deque<int> q;
+    fp(i,0,a.size()-1)
+    {
+        while(!q.empty()&&i-q.front()>len/2)q.ppf();
+        if(!q.empty()){int j=q.front();ans=max(ans,f[a[i]]+i-j+f[a[j]]);}
+        while(!q.empty()&&f[a[i]]-i>=f[a[q.back()]]-q.back())q.ppb();q.pb(i);
+    }
+    fp(i,1,len-1)f[a[0]]=max(f[a[0]],f[a[i]]+min(i,len-i));
+}
+void dfs(int u,int fa)
+{
+    low[u]=dfn[u]=++tim,s.pb(u);
+    go(u)if(v!=fa)
+    {
+        if(!dfn[v])
+        {
+            dfs(v,u),low[u]=min(low[u],low[v]);
+            if(low[v]>=dfn[u])
+            {
+                a.clear();while(!s.empty()&&s.back()!=v)a.pb(s.back()),s.ppb();
+                a.pb(s.back()),s.ppb(),a.pb(u),reverse(all(a)),solve();
+            }
+        }
+        else low[u]=min(low[u],dfn[v]);
+    }
+}
+int work()
+{
+    scanf("%d%d",&n,&m);
+    fp(i,1,m)
+    {
+        int k;scanf("%d",&k);
+        fp(j,1,k)
+        {
+            scanf("%d",&t[j]);
+            if(j!=1)addedge(t[j],t[j-1]),addedge(t[j-1],t[j]);
+        }
+    }
+    dfs(1,0),printf("%d\n",ans);
+    return 0;
+}
+```
+
+
 ## 树上 k 级祖先
 
 ### O(nlogn+qlogn) 在线
@@ -7082,7 +7890,6 @@ int work()
 
 ## 点分治 ## 
 
-
 ### 普通 ###
 
 ```cpp
@@ -7124,7 +7931,6 @@ void solve(int u)
 {
     vis[u]=1,ans+=calc(u,0);
     gow(u)if(!vis[v])ans-=calc(v,w);
-    //cout << dbgs2(root,ans) << endl;
     gow(u)if(!vis[v])root=0,sum=siz[v],find_root(v,u),solve(root);
 }
 LL gcd(LL a,LL b){return b==0?a:gcd(b,a%b);}
@@ -7147,7 +7953,100 @@ int work()
 
 ### 动态(点分树) ###
 
+通常套路：用数据结构维护点分树中 $u$ 这颗子树(分治联通快)所有点到 $u$ 的信息($info1$)，和所有点到 $par[u]$ 的信息($info2$)用于去重。
+
+计算答案时跳点分树用 $info1$ 计算当前联通快内答案，用 $info2$ 去重。
+
+
+[震波](https://www.luogu.com.cn/record/38642390)
+
+求距离点 $u$ 不超过 $k$ 的点的点权和，单点修改。
+
+```cpp
+EDGE(MAXN,MAXN*2);
+namespace lca; //欧拉序lca模板
+int cnt,ls[N],rs[N],s[N];
+void update(int &x,int l,int r,int pos,int val)
+{
+    if(!x)x=++cnt; if(l==r){s[x]+=val;return;}
+    if(pos<=mid)update(ls[x],l,mid,pos,val);
+    else update(rs[x],mid+1,r,pos,val);
+    s[x]=s[ls[x]]+s[rs[x]];
+}
+int query(int x,int l,int r,int nl,int nr)
+{
+    if(!x||nl>nr||nl>r||nr<l)return 0;
+    if(l==nl&&r==nr)return s[x];
+    if(nr<=mid)return query(ls[x],l,mid,nl,nr);
+    if(nl> mid)return query(rs[x],mid+1,r,nl,nr);
+    return query(ls[x],l,mid,l,mid)+query(rs[x],mid+1,r,mid+1,nr);
+}
+int n,m,root,sum;
+int a[MAXN],siz[MAXN],mx[MAXN],sz[MAXN];
+int dis[MAXN],par[MAXN],fa[MAXN];
+bool vis[MAXN]; vector<int> G[MAXN];
+void find_root(int u,int fa)
+{
+    siz[u]=1,mx[u]=0;
+    go(u)if(v!=fa&&!vis[v])find_root(v,u),siz[u]+=siz[v],mx[u]=max(mx[u],siz[v]);
+    mx[u]=max(mx[u],sum-siz[u]);
+    if(!root||mx[u]<mx[root])root=u;
+}
+void solve(int u,int fa)
+{
+    vis[u]=1; if(fa)G[fa].pb(u),::fa[u]=fa;
+    go(u)if(!vis[v])root=0,sum=siz[v],find_root(v,u),solve(root,u);
+}
+void update(int x,int u,int val)
+{
+    update(dis[u],0,sz[u],lca::dis(u,x),val);
+    if(fa[u])
+        update(par[u],0,sz[u]+1,lca::dis(fa[u],x),val),
+        update(x,fa[u],val);
+}
+void calc(int x,int u,int v,int k,int &ans)
+{
+    int d=k-lca::dis(u,x); 
+    if(d>=0)
+    {
+        ans+=query(dis[u],0,sz[u],0,d);
+        if(v)ans-=query(par[v],0,sz[v]+1,0,d);
+    }
+    if(fa[u])calc(x,fa[u],u,k,ans);
+}
+void dfs(int u){sz[u]=1;for(auto v:G[u])dfs(v),sz[u]+=sz[v];}
+int work()
+{
+    scanf("%d%d",&n,&m);
+    fp(i,1,n)scanf("%d",&a[i]);
+    fp(i,1,n-1)
+    {
+        int u,v;scanf("%d%d",&u,&v);
+        addedge(u,v),addedge(v,u);
+    }
+    sum=n,find_root(1,0);int t=root;find_root(t,0);solve(t,0);lca::init(t);dfs(t);
+    fp(i,1,n)update(i,i,a[i]);
+    int last=0;
+    while(m--)
+    {
+        int t,x,y;scanf("%d%d%d",&t,&x,&y);
+        x^=last,y^=last;
+        if(!t) last=0,calc(x,x,0,y,last),printf("%d\n",last);
+        else update(x,x,-a[x]+y),a[x]=y;
+    }
+    return 0;
+}
+```
+
 ## 二分图匹配 ##
+
+### 最大流
+
+转为网络流跑 Dinic，复杂度为 $O(\sqrt{n}m)$，$n=m=1e5$ 时可以考虑
+
+### 匈牙利
+
+$O(nm)$
 
 ```cpp
 EDGE(MAXN,MAXN*2);
@@ -7174,7 +8073,7 @@ int solve()
 
 ## 二分图最大权匹配(KM) ##
 
-$$O(N^3)$$
+$O(N^3)$
 
 ```cpp
 int n,m;
@@ -7819,6 +8718,130 @@ int work()
 ```
 
 # 其他 #
+
+
+## 模拟退火 ##
+
+```cpp
+const db T0    = 1e7;
+const db T_end = 1e-1;
+const db D     = 1-(3e-3);
+const int L    = 100;
+
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+int n,r,ans=0;
+vector<pr> v;
+int p[10],t[10];
+map<int,int> mn,mx;
+int dis(pr x,pr y){return sqr(x.fi-y.fi)+sqr(x.se-y.se);}
+int cost(int p[])
+{
+    int s=0;
+    fp(i,1,n)
+        fp(j,1,i-1)
+            s+=dis(v[p[i]],v[p[j]]);
+    return s;
+}
+inline db rand_f()
+{
+    const int MAX = 1000000000;
+    return db(rng()%MAX)/db(MAX);
+}
+inline bool check(db delta,db T){return delta>0||rand_f()<exp(delta/T);} //保证 delta<0
+void SA()
+{
+    fp(i,1,n)p[i]=rng()%v.size();
+    for(db T=T0;T>T_end;T=T*D)
+    {   
+        fp(tim,1,L)
+        {
+            // fp(i,1,n)t[i]=(p[i]+rng())%v.size();
+            
+            //构造新解
+            int pos=rng()%n+1; 
+            t[pos]=rng()%v.size();
+
+            if(check(cost(t)-cost(p),T))swap(t,p);
+            ans=max({ans,cost(t),cost(p)});
+        }
+        // cout << dbgs2(T,cost(p)) << endl;
+    }
+    // cout << dbgs(cost(p)) << endl;
+}
+int solve()
+{
+    v.clear(),ans=0;
+    fp(i,-r,r)mn[i]=inf,mx[i]=-inf;
+    fp(x,-r,r)fp(y,-r,r)
+        if(x*x+y*y<=r*r)
+            mx[x]=max(mx[x],y),
+            mn[x]=min(mn[x],y);
+    fp(x,-r,r)v.pb({x,mn[x]}),v.pb({x,mx[x]});
+    // int num=min({int(v.size()),4*r+10});
+    // sort(all(v),[](pr x,pr y){return dis(x,{0,0})>dis(y,{0,0});});
+    // while(v.size()>num)v.ppb();
+    SA();
+    return ans;
+}
+
+int work()
+{
+    // freopen("output.txt", "w", stdout);
+    // n=7,r=29; 
+    // int tim = 20;
+    // while(tim--)
+        // cout << solve() << endl;
+
+
+    fp(i,1,8)
+    {
+        fp(j,1,30)
+        {
+            n=i,r=j;
+            // cout << dbgs3(n,r,solve()) << endl;
+            int ans=0;
+            fp(tim,1,1)
+                ans=max(ans,solve());
+            printf("a[%d][%d] = %d;\n",n,r,ans);
+        }
+    }
+    return 0;
+}
+```
+## unordered_map 防爆 ##
+
+
+[Blowing up unordered_map, and how to stop getting hacked on it](https://codeforces.com/blog/entry/62393)
+
+```cpp
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+//Now we can simply define our unordered_map or our gp_hash_table as follows:
+unordered_map<long long, int, custom_hash> safe_map;
+gp_hash_table<long long, int, custom_hash> safe_hash_table;
+```
+
+stl 更快的 hash table
+
+```cpp
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+gp_hash_table<int, int> table;
+```
+
 
 ## 分数类 ##
 

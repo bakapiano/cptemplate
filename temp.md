@@ -1,3 +1,305 @@
+<!-- TOC -->
+
+- [Head](#head)
+- [python](#python)
+- [卡常火车头](#卡常火车头)
+- [读入挂](#读入挂)
+    - [普通](#普通)
+    - [二逼](#二逼)
+    - [fread](#fread)
+        - [1.](#1)
+        - [2.](#2)
+        - [3.](#3)
+- [数据结构](#数据结构)
+    - [区间 MEX](#区间-mex)
+    - [区间 LCM](#区间-lcm)
+    - [集合哈希](#集合哈希)
+    - [维护树上 dis(*，u) 之和](#维护树上-disu-之和)
+    - [笛卡尔树 && Treap 线性构造](#笛卡尔树--treap-线性构造)
+    - [std::list O(1) 合并](#stdlist-o1-合并)
+    - [并查集 & 带权并查集](#并查集--带权并查集)
+    - [数颜色](#数颜色)
+        - [1.莫队 nsqrt(n)](#1莫队-nsqrtn)
+        - [2.主席树 or 二维数点 mlogn](#2主席树-or-二维数点-mlogn)
+            - [主席树](#主席树)
+            - [二维数点(离线sort+树状数组)](#二维数点离线sort树状数组)
+        - [3.树状数组 mlogn (常数小，且可用主席树维护)](#3树状数组-mlogn-常数小且可用主席树维护)
+    - [珂朵莉树](#珂朵莉树)
+        - [资料](#资料)
+        - [例题](#例题)
+        - [模板](#模板)
+    - [树状数组](#树状数组)
+        - [资料](#资料-1)
+        - [二维树状数组](#二维树状数组)
+            - [单点修改 矩阵求和](#单点修改-矩阵求和)
+            - [矩形修改 单点求值](#矩形修改-单点求值)
+        - [矩形修改 矩形求和(待补))](#矩形修改-矩形求和待补)
+    - [线段树](#线段树)
+        - [李超树](#李超树)
+        - [扫描线](#扫描线)
+            - [1.扫描线求矩形面积交](#1扫描线求矩形面积交)
+        - [线段树合并](#线段树合并)
+        - [线段树分裂](#线段树分裂)
+        - [线段树优化建图](#线段树优化建图)
+        - [(待补)ZKW线段树](#待补zkw线段树)
+        - [Segment Tree Beats(吉司机线段树)](#segment-tree-beats吉司机线段树)
+            - [1.区间>=k的数变成k](#1区间k的数变成k)
+            - [2.区间or 区间and 区间max](#2区间or-区间and-区间max)
+    - [可持久化线段树(主席树)](#可持久化线段树主席树)
+        - [模板](#模板-1)
+            - [1.静态区间Kth](#1静态区间kth)
+            - [(待补) 2.区间修改(标记永久化) & 历史版本询问 hdu4348](#待补-2区间修改标记永久化--历史版本询问-hdu4348)
+    - [可持久化 Trie](#可持久化-trie)
+    - [平衡树](#平衡树)
+    - [带删除优先队列](#带删除优先队列)
+        - [1.Splay](#1splay)
+        - [2.Treap](#2treap)
+        - [3.FHQ_treap(非旋Treap)](#3fhq_treap非旋treap)
+            - [排名分裂](#排名分裂)
+            - [权值分裂](#权值分裂)
+        - [4.替罪羊树](#4替罪羊树)
+        - [(待补)5.可持久化平衡树](#待补5可持久化平衡树)
+    - [LCT](#lct)
+        - [LCT 维护边双](#lct-维护边双)
+        - [LCT 维护内向基环树](#lct-维护内向基环树)
+        - [LCT 维护虚子树信息](#lct-维护虚子树信息)
+        - [LCT 维护树上路径信息](#lct-维护树上路径信息)
+        - [LCT 维护同色联通块](#lct-维护同色联通块)
+    - [左偏树(可并堆)](#左偏树可并堆)
+    - [单调栈 & 单调队列](#单调栈--单调队列)
+        - [最大子矩阵](#最大子矩阵)
+        - [二维矩阵最大值](#二维矩阵最大值)
+        - [多重背包](#多重背包)
+    - [树链剖分](#树链剖分)
+        - [1.轻重链剖分](#1轻重链剖分)
+        - [2.dsu on tree](#2dsu-on-tree)
+    - [RMQ & 二维RMQ (ST表)](#rmq--二维rmq-st表)
+        - [1.一维ST表](#1一维st表)
+        - [2.二维ST表](#2二维st表)
+    - [莫队](#莫队)
+        - [带修莫队](#带修莫队)
+        - [树上莫队](#树上莫队)
+        - [回滚莫队](#回滚莫队)
+            - [具体步骤](#具体步骤)
+            - [模板](#模板-2)
+        - [二次离线莫队](#二次离线莫队)
+    - [分块](#分块)
+        - [询问分块](#询问分块)
+        - [维护 ans=kx+y 的最大值(x,y常数且多个 k可变)](#维护-anskxy-的最大值xy常数且多个-k可变)
+        - [值域分块](#值域分块)
+    - [树分快](#树分快)
+        - [随即散点](#随即散点)
+        - [王室联邦](#王室联邦)
+        - [height分块](#height分块)
+    - [CDQ分治](#cdq分治)
+        - [1.二维偏序](#1二维偏序)
+        - [2.三维偏序](#2三维偏序)
+        - [3.四维偏序 CDQ套CDQ](#3四维偏序-cdq套cdq)
+        - [4.带插入曼哈顿距离最近点对(天使玩偶)](#4带插入曼哈顿距离最近点对天使玩偶)
+    - [(待补)整体二分](#待补整体二分)
+    - [树套树](#树套树)
+        - [1.线段树套线段树](#1线段树套线段树)
+        - [2.树状数组套动态开点线段树](#2树状数组套动态开点线段树)
+        - [3.线段树套平衡树](#3线段树套平衡树)
+        - [4.平衡树套线段树](#4平衡树套线段树)
+            - [暴力重构O(nlogn^3)](#暴力重构onlogn^3)
+            - [线段树合并](#线段树合并-1)
+    - [KD-Tree](#kd-tree)
+        - [通用](#通用)
+        - [邻域查询](#邻域查询)
+        - [带插入删除(替罪羊树重构思想)](#带插入删除替罪羊树重构思想)
+        - [高维询问/修改](#高维询问修改)
+- [字符串](#字符串)
+    - [字符串哈希](#字符串哈希)
+        - [模板](#模板-3)
+            - [1.自然溢出](#1自然溢出)
+            - [2.二维矩阵hash](#2二维矩阵hash)
+            - [3.双hash](#3双hash)
+    - [序列自动机](#序列自动机)
+        - [长度为 $k$ 的本质不同子序列个数](#长度为-k-的本质不同子序列个数)
+    - [树状数组维护字符串哈希](#树状数组维护字符串哈希)
+    - [KMP](#kmp)
+        - [资料](#资料-2)
+        - [模板](#模板-4)
+        - [应用](#应用)
+            - [1.求字符串的最小循环节](#1求字符串的最小循环节)
+            - [2.求字符串 $S$ 每一个前缀在字符串 $T$ 中的出现次数](#2求字符串-s-每一个前缀在字符串-t-中的出现次数)
+    - [扩展kmp](#扩展kmp)
+        - [资料](#资料-3)
+        - [模板](#模板-5)
+    - [字符串最小表示法](#字符串最小表示法)
+        - [循环同构](#循环同构)
+        - [最小表示](#最小表示)
+        - [资料](#资料-4)
+        - [模板](#模板-6)
+    - [manacher](#manacher)
+    - [AC自动机](#ac自动机)
+        - [1.求以文本串每个位置匹配的模式串个数](#1求以文本串每个位置匹配的模式串个数)
+        - [2.求每个模式串的出现次数](#2求每个模式串的出现次数)
+    - [后缀数组](#后缀数组)
+        - [数组含义](#数组含义)
+        - [性质](#性质)
+        - [模板](#模板-7)
+        - [统计字符串中相同的子串的对数 或 字符串中每一对后缀的LCP之和](#统计字符串中相同的子串的对数-或-字符串中每一对后缀的lcp之和)
+            - [模板](#模板-8)
+        - [字符串本质不同的子串个数](#字符串本质不同的子串个数)
+    - [后缀自动机](#后缀自动机)
+        - [资料](#资料-5)
+        - [笔记](#笔记)
+        - [模板](#模板-9)
+        - [技巧 & 应用](#技巧--应用)
+            - [1.求 $endpos$ 集合的大小/最大值/最小值](#1求-endpos-集合的大小最大值最小值)
+            - [2. $logn$ 查找某个子串在 $SAM$ 上对应的状态](#2-logn-查找某个子串在-sam-上对应的状态)
+            - [3. 两个串的LCS](#3-两个串的lcs)
+            - [4.本质不同的子串个数](#4本质不同的子串个数)
+            - [5.最小表示法](#5最小表示法)
+            - [6.字典序k大子串](#6字典序k大子串)
+            - [7.多个串的LCS](#7多个串的lcs)
+            - [8.询问某一子串的后缀自动机](#8询问某一子串的后缀自动机)
+            - [9.LCT 维护 par 树和 endpos 集合大小](#9lct-维护-par-树和-endpos-集合大小)
+    - [广义SAM](#广义sam)
+        - [模板](#模板-10)
+        - [维护字符串在分组中的出现情况](#维护字符串在分组中的出现情况)
+    - [回文自动机(回文树)](#回文自动机回文树)
+        - [PAM 上匹配](#pam-上匹配)
+        - [支持首尾添加字符](#支持首尾添加字符)
+    - [Shift-And](#shift-and)
+- [数学 & 数论](#数学--数论)
+    - [实数线性规划(单纯形)](#实数线性规划单纯形)
+    - [二次剩余](#二次剩余)
+    - [斐波那契通项公式](#斐波那契通项公式)
+    - [等比求和](#等比求和)
+    - [等差求和](#等差求和)
+    - [GCD & EXGCD](#gcd--exgcd)
+        - [1.解方程 $ax+by=c$](#1解方程-axbyc)
+    - [快速幂](#快速幂)
+    - [因子求和](#因子求和)
+    - [线性筛素数](#线性筛素数)
+    - [n 以内素数个数](#n-以内素数个数)
+    - [(待补)阶乘分解质因数](#待补阶乘分解质因数)
+    - [组合数递推](#组合数递推)
+    - [组合数预处理](#组合数预处理)
+    - [FFT](#fft)
+        - [资料](#资料-6)
+        - [模板](#模板-11)
+            - [常规](#常规)
+            - [卡常](#卡常)
+    - [高斯消元](#高斯消元)
+        - [普通](#普通-1)
+        - [模意义](#模意义)
+    - [Lucas](#lucas)
+    - [欧拉降幂](#欧拉降幂)
+    - [(待补)中国剩余定理](#待补中国剩余定理)
+    - [线性求逆元](#线性求逆元)
+    - [数论分块(整除分块)](#数论分块整除分块)
+    - [O(1)组合数套装](#o1组合数套装)
+    - [线性基](#线性基)
+        - [资料](#资料-7)
+        - [性质](#性质-1)
+        - [模板](#模板-12)
+            - [1.线性基求最大异或和](#1线性基求最大异或和)
+            - [2.前缀线性基](#2前缀线性基)
+- [dp](#dp)
+    - [树上背包上下界优化 O(nm)](#树上背包上下界优化-onm)
+        - [参考](#参考)
+        - [模板](#模板-13)
+    - [NlogN求LIS](#nlogn求lis)
+        - [模板](#模板-14)
+    - [数位DP 记忆化搜索](#数位dp-记忆化搜索)
+        - [模板](#模板-15)
+    - [子集枚举(SOS-DP)](#子集枚举sos-dp)
+        - [O(3^n)](#o3^n)
+        - [O(n*2^n)](#on2^n)
+    - [决策单调性](#决策单调性)
+        - [可离线](#可离线)
+        - [不可离线](#不可离线)
+    - [斜率优化](#斜率优化)
+- [图论](#图论)
+    - [图上随机游走](#图上随机游走)
+    - [树 hash](#树-hash)
+    - [2-sat](#2-sat)
+    - [支配树](#支配树)
+    - [虚树](#虚树)
+    - [DSU Tree](#dsu-tree)
+    - [Kruskal重构树](#kruskal重构树)
+        - [资料](#资料-8)
+        - [模板](#模板-16)
+        - [例题](#例题-1)
+    - [传递闭包](#传递闭包)
+    - [最小环](#最小环)
+        - [无边权](#无边权)
+        - [有边权](#有边权)
+    - [KM](#km)
+    - [tarjan](#tarjan)
+        - [1.无向图 割点](#1无向图-割点)
+        - [2.无向图 割边](#2无向图-割边)
+        - [3.无向图 点双缩点](#3无向图-点双缩点)
+        - [4.无向图 边双缩点](#4无向图-边双缩点)
+        - [5.有向图强连通分量缩点](#5有向图强连通分量缩点)
+    - [处理仙人掌](#处理仙人掌)
+        - [求环外分支大小](#求环外分支大小)
+        - [仙人掌最短路](#仙人掌最短路)
+        - [仙人掌直径](#仙人掌直径)
+    - [树上 k 级祖先](#树上-k-级祖先)
+        - [O(nlogn+qlogn) 在线](#onlognqlogn-在线)
+        - [O(n+q) 离线](#onq-离线)
+        - [O(nlogn+q) 在线](#onlognq-在线)
+    - [lca](#lca)
+        - [1.倍增](#1倍增)
+        - [2.欧拉序+RMQ](#2欧拉序rmq)
+    - [Spfa 判负环](#spfa-判负环)
+    - [点分治](#点分治)
+        - [普通](#普通-2)
+        - [动态(点分树)](#动态点分树)
+    - [二分图匹配](#二分图匹配)
+        - [二分图相关结论](#二分图相关结论)
+            - [最小顶点覆盖 = 最大匹配数](#最小顶点覆盖--最大匹配数)
+            - [最大独立集 = 总点数 - 最大匹配数](#最大独立集--总点数---最大匹配数)
+            - [二分图最大团](#二分图最大团)
+            - [DAG 最小不相交路径覆盖](#dag-最小不相交路径覆盖)
+            - [DAG 最小可相交路径覆盖](#dag-最小可相交路径覆盖)
+            - [偏序集的最大反链](#偏序集的最大反链)
+        - [最大流](#最大流)
+        - [匈牙利](#匈牙利)
+    - [二分图最大权匹配(KM)](#二分图最大权匹配km)
+    - [一般图最大匹配(带花树)](#一般图最大匹配带花树)
+    - [一般图最大权匹配](#一般图最大权匹配)
+    - [最大流](#最大流-1)
+        - [Dinic](#dinic)
+        - [Push relabel](#push-relabel)
+    - [费用流](#费用流)
+        - [1. Dinic Bfs改最短路算法](#1-dinic-bfs改最短路算法)
+            - [Spfa](#spfa)
+            - [Dijkstra](#dijkstra)
+        - [2.EK](#2ek)
+            - [Dijkstra](#dijkstra-1)
+    - [欧拉回路](#欧拉回路)
+- [计算几何](#计算几何)
+    - [二维计算几何](#二维计算几何)
+    - [二维凸包](#二维凸包)
+    - [最小圆覆盖](#最小圆覆盖)
+    - [最小球覆盖](#最小球覆盖)
+- [其他](#其他)
+    - [尺取法](#尺取法)
+    - [模拟退火](#模拟退火)
+    - [unordered_map 防爆](#unordered_map-防爆)
+    - [分数类](#分数类)
+    - [mt19937](#mt19937)
+    - [预处理log2](#预处理log2)
+    - [基数排序](#基数排序)
+        - [模板](#模板-17)
+    - [舞蹈链(DLX)](#舞蹈链dlx)
+        - [精准覆盖](#精准覆盖)
+        - [重复覆盖](#重复覆盖)
+    - [动态二维数组](#动态二维数组)
+        - [模板](#模板-18)
+    - [Meet in mid](#meet-in-mid)
+    - [二分答案](#二分答案)
+        - [模板](#模板-19)
+    - [三分](#三分)
+
+<!-- /TOC -->
+
 # Head #
 
 ```cpp
@@ -128,22 +430,69 @@ n,m,k = map(int,raw_input().split())
 f = [[0 for i in range(10)] for i in range(10)]
 ```
 
+# 卡常火车头 #
+
+```cpp
+#pragma GCC diagnostic error "-std=c++11"
+#pragma GCC target("avx")
+#pragma GCC optimize(3)
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("inline")
+#pragma GCC optimize("-fgcse")
+#pragma GCC optimize("-fgcse-lm")
+#pragma GCC optimize("-fipa-sra")
+#pragma GCC optimize("-ftree-pre")
+#pragma GCC optimize("-ftree-vrp")
+#pragma GCC optimize("-fpeephole2")
+#pragma GCC optimize("-ffast-math")
+#pragma GCC optimize("-fsched-spec")
+#pragma GCC optimize("unroll-loops")
+#pragma GCC optimize("-falign-jumps")
+#pragma GCC optimize("-falign-loops")
+#pragma GCC optimize("-falign-labels")
+#pragma GCC optimize("-fdevirtualize")
+#pragma GCC optimize("-fcaller-saves")
+#pragma GCC optimize("-fcrossjumping")
+#pragma GCC optimize("-fthread-jumps")
+#pragma GCC optimize("-funroll-loops")
+#pragma GCC optimize("-fwhole-program")
+#pragma GCC optimize("-freorder-blocks")
+#pragma GCC optimize("-fschedule-insns")
+#pragma GCC optimize("inline-functions")
+#pragma GCC optimize("-ftree-tail-merge")
+#pragma GCC optimize("-fschedule-insns2")
+#pragma GCC optimize("-fstrict-aliasing")
+#pragma GCC optimize("-fstrict-overflow")
+#pragma GCC optimize("-falign-functions")
+#pragma GCC optimize("-fcse-skip-blocks")
+#pragma GCC optimize("-fcse-follow-jumps")
+#pragma GCC optimize("-fsched-interblock")
+#pragma GCC optimize("-fpartial-inlining")
+#pragma GCC optimize("no-stack-protector")
+#pragma GCC optimize("-freorder-functions")
+#pragma GCC optimize("-findirect-inlining")
+#pragma GCC optimize("-fhoist-adjacent-loads")
+#pragma GCC optimize("-frerun-cse-after-loop")
+#pragma GCC optimize("inline-small-functions")
+#pragma GCC optimize("-finline-small-functions")
+#pragma GCC optimize("-ftree-switch-conversion")
+#pragma GCC optimize("-foptimize-sibling-calls")
+#pragma GCC optimize("-fexpensive-optimizations")
+#pragma GCC optimize("-funsafe-loop-optimizations")
+#pragma GCC optimize("inline-functions-called-once")
+#pragma GCC optimize("-fdelete-null-pointer-checks")
+```
+
 # 读入挂 #
 
 ## 普通 ##
 
 ```cpp
-inline int read()
-{
-    int sum=0;char ch=getchar();
-    while(!(ch>='0'&&ch<='9'))ch=getchar();
-    while(ch>='0'&&ch<='9')sum=sum*10+ch-48,ch=getchar();
-    return sum;
-}
-inline void out(int x)
-{
-   if(x>9)out(x/10);
-   putchar(x%10+'0');
+template <class T> void read(T &x) {
+	int f = 0; x = 0; char ch = getchar();
+	for (; !isdigit(ch); ch = getchar()) f |= (ch == '-');
+	for (; isdigit(ch); ch = getchar()) x = x * 10 + ch - '0';
+	if (f) x = -x;
 }
 ```
 
@@ -274,7 +623,113 @@ namespace io {
 }
 ```
 
+### 3.
+
+```cpp
+namespace io {
+	const int SIZE = (1 << 21) + 1;
+	char ibuf[SIZE], *iS, *iT, obuf[SIZE], *oS = obuf, *oT = oS + SIZE - 1, c, qu[55]; int f, qr;
+	// getchar
+	#define gc() (iS == iT ? (iT = (iS = ibuf) + fread (ibuf, 1, SIZE, stdin), (iS == iT ? EOF : *iS ++)) : *iS ++)
+	// print the remaining part
+	inline void flush () {
+		fwrite (obuf, 1, oS - obuf, stdout);
+		oS = obuf;
+	}
+	// putchar
+	inline void putc (char x) {
+		*oS ++ = x;
+		if (oS == oT) flush ();
+	}
+	template<typename A>
+	inline bool read (A &x) {
+		for (f = 1, c = gc(); c < '0' || c > '9'; c = gc()) if (c == '-') f = -1;else if(c==EOF)return 0;
+		for (x = 0; c <= '9' && c >= '0'; c = gc()) x = x * 10 + (c & 15); x *= f;
+		return 1;
+	}
+	inline bool read (char &x) {
+		while((x=gc())==' '||x=='\n' || x=='\r');
+		return x!=EOF;
+	}
+	inline bool read(char *x){
+		while((*x=gc())=='\n' || *x==' '||*x=='\r');
+		if(*x==EOF)return 0;
+		while(!(*x=='\n'||*x==' '||*x=='\r'||*x==EOF))*(++x)=gc();
+		*x=0;
+		return 1;
+	}
+	template<typename A,typename ...B>
+	inline bool read(A &x,B &...y){
+		return read(x)&&read(y...);
+	}
+	template<typename A>
+	inline bool write (A x) {
+		if (!x) putc ('0'); if (x < 0) putc ('-'), x = -x;
+		while (x) qu[++ qr] = x % 10 + '0',  x /= 10;
+		while (qr) putc (qu[qr --]);
+		return 0;
+	}
+	inline bool write (char x) {
+		putc(x);
+		return 0;
+	}
+	inline bool write(const char *x){
+		while(*x){putc(*x);++x;}
+		return 0;
+	}
+	inline bool write(char *x){
+		while(*x){putc(*x);++x;}
+		return 0;
+	}
+	template<typename A,typename ...B>
+	inline bool write(A x,B ...y){
+		return write(x)||write(y...);
+	}
+	//no need to call flush at the end manually!
+	struct Flusher_ {~Flusher_(){flush();}}io_flusher_;
+}
+```
+
 # 数据结构 #
+
+## 区间 MEX ##
+
+权值线段树维护每个数出现的最右位置和区间 $min$，询问时线段树上二分。
+
+强制在线用主席树
+
+```cpp
+int n,m;
+int a[MAXN],l[MAXN],r[MAXN],ans[MAXN],mn[MAXN*4];
+vector<int> q[MAXN];
+void update(int l,int r,int pos,int val,int cnt)
+{
+    if(l==r)return void(mn[cnt]=val);
+    if(pos<=mid)update(l,mid,pos,val,ls);
+    else update(mid+1,r,pos,val,rs);
+    mn[cnt]=min(mn[ls],mn[rs]);
+}
+int query(int l,int r,int left,int cnt)
+{
+    if(l==r)return l;
+    if(mn[ls]>=left)return query(mid+1,r,left,rs);
+    else return query(l,mid,left,ls);
+}
+int work()
+{
+    scanf("%d%d",&n,&m);
+    fp(i,1,n)scanf("%d",&a[i]),a[i]=min(a[i],n+1);
+    fp(i,1,m)scanf("%d%d",&l[i],&r[i]),q[r[i]].pb(i);
+    fp(i,1,n)
+    {
+        update(0,n+1,a[i],i,1);
+        for(auto j:q[i])
+            ans[j]=query(0,n+1,l[j],1);
+    }
+    fp(i,1,m)printf("%d\n",ans[i]);
+    return 0;
+}
+```
 
 ##  区间 LCM ##
 
@@ -354,7 +809,7 @@ int work()
 }
 ```
 
-## 顺序无关的区间 hash ##
+## 集合哈希 ##
 
 [luogu P6688 可重集](https://www.luogu.com.cn/problem/P6688)
 
@@ -404,6 +859,53 @@ int work()
 ```
 
 ## 并查集 & 带权并查集 ##
+
+1.均摊 O(1) 维护 >=l 的满足某性质的第一个位置
+
+2.涂颜色
+
+3.维护图中有无奇环(是否为二分图)
+
+```cpp
+struct DSU
+{
+    struct info{int fa,sz,w;}t[MAXN];
+    vector<pair<int,info>> v;
+    void init(int n){fp(i,1,n)t[i].fa=i,t[i].sz=1,t[i].w=0;v.clear();}
+    int find(int x){return x==t[x].fa?x:find(t[x].fa);}
+    int dis(int x)
+    {
+        if(x==t[x].fa)return 0;
+        return (dis(t[x].fa)+t[x].w)&1;
+    }
+    bool merge(int a,int b,int &cnt)
+    {
+        int da=dis(a),db=dis(b);
+        if(find(a)==find(b)) return (da&1)!=(db&1);
+        else 
+        {
+            a=find(a),b=find(b);
+            if(t[a].sz>t[b].sz)swap(a,b),swap(da,db);
+            ++cnt,v.pb({a,t[a]}),v.pb({b,t[b]});
+            t[b].sz+=t[a].sz,t[a].fa=b,t[a].w=(da+db+1)&1;
+            return 1;
+        }
+    }
+    void undo()
+    {
+        t[v.back().fi]=v.back().se,v.ppb();
+        t[v.back().fi]=v.back().se,v.ppb();
+    }
+    void debug(int n)
+    {
+        fp(i,1,n)
+        {
+            cout << dbgs4(i,t[i].fa,t[i].sz,t[i].w) << endl;
+        }
+    }
+}S,T;
+```
+
 
 ## 数颜色 ##
 
@@ -877,7 +1379,7 @@ int work()
 ```cpp
 int merge(int x,int y,int l,int r)
 {
-    if(x*y==0)return x+y; 
+    if(!x||!y)return x+y; 
     if(l==r){mx[x]+=mx[y];return x;}
     ls[x]=merge(ls[x],ls[y],l,mid);
     rs[x]=merge(rs[x],rs[y],mid+1,r);
@@ -1879,9 +2381,125 @@ int work()
 
 ## 单调栈 & 单调队列 ##
 
+### 最大子矩阵
+
+```cpp
+int n,m;
+bool a[MAXN][MAXN],s[MAXN][MAXN];
+int h[MAXN],l[MAXN],r[MAXN];
+int ans1=0,ans2=0;
+vector<pr> q;
+void init(int i)
+{
+    fp(j,1,m)
+    {
+        if(a[i][j]) h[j]=0;
+        else h[j]=(a[i][j]==a[i-1][j])?(h[j]+1):1;
+    }
+    fp(j,1,m)
+    {
+        pr cur={h[j],j};
+        while(!q.empty()&&cur<q.back())
+            r[q.back().se]=j,q.ppb();
+        q.pb(cur);
+    }
+    for(auto t:q) r[t.se]=m+1;
+    q.clear();
+    fd(j,m,1)
+    {
+        pr cur={h[j],j};
+        while(!q.empty()&&cur<q.back())
+            l[q.back().se]=j,q.ppb();
+        q.pb(cur);
+    }
+    for(auto t:q) l[t.se]=0;
+    q.clear();
+}
+
+void solve()
+{
+    mst(h,0);
+    fp(i,1,n)
+    {
+        init(i);
+        fp(j,1,m)
+        {
+            int w=r[j]-l[j]-1;
+            ans1=max(ans1,min(h[j],w)*min(h[j],w));
+            ans2=max(ans2,w*h[j]);
+        }
+    }
+}
+```
+
+### 二维矩阵最大值
+
+```cpp
+//s[i][j]表示a[i][max(1,j-k+1)]~a[i][j]的最值
+int n,m,k,a[MAXN][MAXN],s[MAXN][MAXN]; 
+deque<int> q[MAXN];
+int work()
+{
+    scanf("%d%d%d",&n,&m,&k);
+    fp(i,1,n)fp(j,1,m)scanf("%d",&a[i][j]);
+    fp(i,1,n)
+    {
+        deque<int> v;
+        fp(j,1,m)
+        {
+            while(!v.empty()&&j-v.front()+1>k)v.ppf();
+            while(!q[j].empty()&&i-q[j].front()+1>k)q[j].ppf();
+
+            int cur=-inf;
+            if(!v.empty())cur=max(cur,a[i][v.front()]);
+            if(!q[j].empty())cur=max(cur,s[q[j].front()][j]);
+
+            //cur为矩阵(i-k+1,j-k+1),(i,j)内除了(i,j)以外a[x][y]的最大值
+            cur=max(cur,a[i][j]);
+
+            while(!v.empty()&&a[i][j]>a[i][v.back()])v.ppb();
+            v.pb(j);
+            s[i][j]=a[i][v.front()];
+            while(!q[j].empty()&&s[i][j]>s[q[j].back()][j])q[j].ppb();
+            q[j].pb(i);
+        }
+    }
+    return 0;
+}
+```
+### 多重背包
+
+```cpp
+int n,V,ans;
+int f[MAXN][N],v[MAXN],w[MAXN],c[MAXN];
+int value(int i,int s,int k){return f[i-1][s+k*v[i]]-k*w[i];}
+int q[N],h=0,t=1;
+int work()
+{
+    scanf("%d%d",&n,&V);
+    fp(i,1,n)scanf("%d%d%d",&v[i],&w[i],&c[i]);
+    fp(i,1,n)
+    {
+        for(rg int s=0;s<v[i];s++)
+        {
+            h=1,t=0;
+            for(rg int j=s;j<=V;j+=v[i])
+            {
+                int k=(j-s)/v[i];
+                while(h<=t&&value(i,s,k)>=value(i,s,q[t]))--t;
+                q[++t]=k;
+                while(h<=t&&k-q[h]>c[i])++h;
+                f[i][j]=value(i,s,q[h])+k*w[i],ans=max(ans,f[i][j]);
+            }
+        }
+    }
+    return printf("%d\n",ans);
+}
+```
+
 ## 树链剖分 ##
 
-### 1.重链剖分 ###
+### 1.轻重链剖分 ###
 
 ```cpp
 int n,m,root;
@@ -4220,8 +4838,7 @@ namespace BIT
 
 ### 资料 ###
 
-[前缀函数与 KMP 算法 OI Wiki	
-](https://oi-wiki.org/string/kmp/)
+[前缀函数与 KMP 算法 OI Wiki](https://oi-wiki.org/string/kmp/)
 ### 模板 ###
 ```cpp
 namespace kmp
@@ -5592,6 +6209,94 @@ namespace PAM
 };
 ```
 
+### PAM 上匹配
+
+```cpp
+int L=-1,cur=root1; t[0]='#';
+for(int i=1;i<=m;i++)
+{   
+    int c=t[i]-'a';
+    while(cur!=root1&&((!nx[cur][c])||L+2>i||t[i]!=t[i-L-1]))
+        cur=fail[cur],L=len[cur];
+    if(nx[cur][c]&&L+2<=i&&t[i]==t[i-L-1])cur=nx[cur][c],L+=2;
+    mx=max(mx,L),match[cur]=1;
+}
+```
+
+### 支持首尾添加字符
+
+```cpp
+const int K = 26;
+namespace PAM
+{
+    int cnt,root1,root2,last[2];
+    int nx[MAXN*2][K],len[MAXN*2],fail[MAXN*2],h[MAXN*2];
+    LL  sum=0;
+    deque<int> str;
+    void newnode(int &x)
+    {
+        x=++cnt;
+        fp(i,0,K-1) nx[x][i]=0;
+        len[x]=fail[x]=0;
+    }
+    void init()
+    {
+        cnt=0,str.clear(),sum=0;
+        newnode(root1),len[root1]=-1;
+        newnode(root2),len[root2]= 0;
+        fail[root2]=root1,last[0]=last[1]=root1,h[root2]=0;
+    }
+    int get_fail(int x,int d)
+    {
+        int n=str.size();
+        if(d==0) while(len[x]+1>=n||str[len[x]+1]!=str[0])x=fail[x];
+        else while(n-len[x]-2<0||str[n-len[x]-2]!=str.back())x=fail[x];
+        return x;
+    }
+    void extend(int c,int d)
+    {
+        if(!d)str.pf(c);
+        else  str.pb(c);
+        int p=last[d],np; p=get_fail(p,d);
+        if(nx[p][c]) np=nx[p][c];
+        else
+        {
+            newnode(np);
+            nx[p][c]=np;
+            len[np]=len[p]+2;
+            if(p==root1) fail[np]=root2;
+            else
+            {
+                p=fail[p];
+                p=get_fail(p,d);
+                fail[np]=nx[p][c];
+            }
+            h[np]=h[fail[np]]+1;
+        }
+        last[d]=np;
+        if(len[np]==str.size())last[d^1]=np;
+        sum+=h[np];
+    }
+};
+int work()
+{
+    int m;
+    while(scanf("%d",&m)!=EOF)
+    {
+        PAM::init();
+        while(m--)
+        {
+            int t;char s[5];scanf("%d",&t);
+            if(t==1)scanf("%s",s),PAM::extend(s[0]-'a',0);
+            if(t==2)scanf("%s",s),PAM::extend(s[0]-'a',1);
+            if(t==3)printf("%d\n",PAM::cnt-2);
+            if(t==4)printf("%lld\n",PAM::sum);
+        }
+    }
+    return 0;
+}
+```
+
 ## Shift-And
 
 可以处理一些带限制的子串匹配问题，$O(n*m/64)$
@@ -5640,6 +6345,86 @@ int work()
 ```
 
 # 数学 & 数论 #
+
+## 实数线性规划(单纯形)
+
+模板来自 [单纯形法 - fjzzq2002](https://www.cnblogs.com/zzqsblog/articles/5457091.html)
+
+有 $n$ 个实数变量 $x1,x2,\cdots,xn$ 和 $m$ 条约束，其中第 $i$ 条约束形如 $\sum_{j=1}^{n} a_{ij}x_{j} \le b_{i}$。
+
+此外这 $n$ 个变量需要满足非负性限制，即 $x_{j} \ge 0$。
+
+在满足上述所有条件的情况下，你需要指定每个变量 $x_{j}$ 的取值，使得目标函数 $F=\sum_{j=1}^{n}c_{j}x_{j}$ 的值最大。
+
+[UOJ#179. 线性规划](https://uoj.ac/problem/179)
+
+```cpp
+int n,m,type,id[MAXN*2];
+ld a[MAXN][MAXN],ans[MAXN*2];
+const ld eps = 1e-7;
+int sign(ld x)
+{
+    if(x> eps)return  1;
+    if(x<-eps)return -1;
+    return 0;
+}
+void pivot(int r,int c) //交换基变量r与非基变量c
+{
+    swap(id[r+n],id[c]);
+    ld x=-a[r][c]; a[r][c]=-1;
+    fp(i,0,n)a[r][i]/=x;
+    fp(i,0,m)
+    {
+        if(sign(a[i][c])&&i!=r);else continue;
+        x=a[i][c],a[i][c]=0;
+        fp(j,0,n)a[i][j]+=x*a[r][j];
+    }
+}
+void simplex()
+{
+    fp(i,1,n)id[i]=i;
+    fp(i,n+1,n+m)id[i]=0;
+    // fp(i,1,n)fp(j,1,m)a[i][j]*=-1;
+    while(1) //init
+    {
+        int x=0,y=0;
+        fp(i,1,m)if(sign(a[i][0])<0&&(!x||(rand()&1)))x=i;
+        if(!x)break;
+        fp(i,1,n)if(sign(a[x][i])>0&&(!y||(rand()&1))){y=i;break;}
+        if(!y)return void(puts("Infeasible"));//不存在满足约束的解
+        pivot(x,y);
+    }
+    while(1) //simplex
+    {
+        int x=0,y=0;
+        fp(i,1,n)if(sign(a[0][i])>0&&(!x||(rand()&1))){x=i;break;}
+        if(!x)break;
+        ld w; bool f=1;
+        fp(i,1,m)if(sign(a[i][x])<0&&(f||-a[i][0]/a[i][x]<w))
+            y=i,f=0,w=-a[i][0]/a[i][x];
+        if(!y)return void(puts("Unbounded"));//解无穷大
+        pivot(y,x);
+    }
+    printf("%.9f\n",db(a[0][0]));
+    if(!type)return;
+    fp(i,1,n)ans[i]=0;
+    fp(i,n+1,n+m)ans[id[i]]=a[i-n][0];
+    fp(i,1,n)printf("%.9f ",db(ans[i]));
+}
+int work()
+{
+    cin >> n >> m >> type;
+    fp(i,1,n) cin >> a[0][i];
+    fp(i,1,m)
+    {
+        fp(j,1,n)cin >> a[i][j];
+        a[i][j]*=-1;
+        cin >> a[i][0];
+    }
+    simplex();
+    return 0;
+}
+```
 
 ## 二次剩余
 
@@ -5902,6 +6687,107 @@ void init_prime(int n)
             if(i%p==0) break;
         }
     }
+}
+```
+
+## n 以内素数个数
+
+[Meissel-Lehmer算法 | Nanako](https://tanakarino.cn/2020/06/02/Meissel-Lehmer%E7%AE%97%E6%B3%95/)
+
+时空 $O(n^{\frac23})$
+
+```cpp
+const int N = 5e6 + 2;//通过知道前面的n^1/3的质数可以推断后面n^2/3的质数所以可以适当减小
+bool np[N];
+int prime[N], pi[N];
+int getprime()
+{
+    int cnt = 0;
+    np[0] = np[1] = true;
+    pi[0] = pi[1] = 0;
+    for(int i = 2; i < N; ++i)
+    {
+        if(!np[i]) prime[++cnt] = i;
+        pi[i] = cnt;
+        for(int j = 1; j <= cnt && i * prime[j] < N; ++j)
+        {
+            np[i * prime[j]] = true;
+            if(i % prime[j] == 0)   break;
+        }
+    }
+    return cnt;
+}
+const int M = 7;//为了减小内存可以不过是质数
+const int PM = 2 * 3 * 5 * 7 * 11 * 13 * 17;//为了减小内存可以不过要按质数减小如去掉17
+int phi[PM + 1][M + 1], sz[M + 1];
+void init()
+{
+    getprime();
+    sz[0] = 1;
+    for(int i = 0; i <= PM; ++i)  phi[i][0] = i;
+    for(int i = 1; i <= M; ++i)
+    {
+        sz[i] = prime[i] * sz[i - 1];
+        for(int j = 1; j <= PM; ++j) phi[j][i] = phi[j][i - 1] - phi[j / prime[i]][i - 1];
+    }
+}
+int sqrt2(ll x)
+{
+    ll r = (ll)sqrt(x - 0.1);
+    while(r * r <= x)   ++r;
+    return int(r - 1);
+}
+int sqrt3(ll x)
+{
+    ll r = (ll)cbrt(x - 0.1);
+    while(r * r * r <= x)   ++r;
+    return int(r - 1);
+}
+ll getphi(ll x, int s)
+{
+    if(s == 0)  return x;
+    if(s <= M)  return phi[x % sz[s]][s] + (x / sz[s]) * phi[sz[s]][s];
+    if(x <= prime[s]*prime[s])   return pi[x] - s + 1;
+    if(x <= prime[s]*prime[s]*prime[s] && x < N)
+    {
+        int s2x = pi[sqrt2(x)];
+        ll ans = pi[x] - (s2x + s - 2) * (s2x - s + 1) / 2;
+        for(int i = s + 1; i <= s2x; ++i) ans += pi[x / prime[i]];
+        return ans;
+    }
+    return getphi(x, s - 1) - getphi(x / prime[s], s - 1);
+}
+ll getpi(ll x)
+{
+    if(x < N)   return pi[x];
+    ll ans = getphi(x, pi[sqrt3(x)]) + pi[sqrt3(x)] - 1;
+    for(int i = pi[sqrt3(x)] + 1, ed = pi[sqrt2(x)]; i <= ed; ++i) ans -= getpi(x / prime[i]) - i + 1;
+    return ans;
+}
+ll lehmer_pi(ll x)
+{
+    if(x < N)   return pi[x];
+    int a = (int)lehmer_pi(sqrt2(sqrt2(x)));
+    int b = (int)lehmer_pi(sqrt2(x));
+    int c = (int)lehmer_pi(sqrt3(x));
+    ll sum = getphi(x, a) +(ll)(b + a - 2) * (b - a + 1) / 2;
+    for (int i = a + 1; i <= b; i++)
+    {
+        ll w = x / prime[i];
+        sum -= lehmer_pi(w);
+        if (i > c) continue;
+        ll lim = lehmer_pi(sqrt2(w));
+        for (int j = i; j <= lim; j++) sum -= lehmer_pi(w / prime[j]) - (j - 1);
+    }
+    return sum;
+}
+int work()
+{
+    LL n; 
+    cin >> n;
+    init();
+    cout << getpi(n) << endl;
+    return 0;
 }
 ```
 
@@ -8963,6 +9849,9 @@ int work()
 
 # 其他 #
 
+## 尺取法 ##
+
+要求 最大值 - 最小值 尽量小时可以考虑尺取法
 
 ## 模拟退火 ##
 
@@ -9378,6 +10267,10 @@ public:
 };
 ```
 
+## Meet in mid ##
+
+可以考虑 meet in $1/3$，当需要快速回答询问时
+
 ## 二分答案 ##
 
 ### 模板 ### 
@@ -9423,62 +10316,5 @@ int work()
     }
     cout << fixed << setprecision(5) << l << endl;
     return 0;
-}
-```
-
-
-
-## 单调栈 最大子矩阵 ##
-
-### 模板 ###
-
-```cpp
-int n,m;
-bool a[MAXN][MAXN],s[MAXN][MAXN];
-int h[MAXN],l[MAXN],r[MAXN];
-int ans1=0,ans2=0;
-
-vector<pr> q;
-
-void init(int i)
-{
-    fp(j,1,m)
-    {
-        if(a[i][j]) h[j]=0;
-        else h[j]=(a[i][j]==a[i-1][j])?(h[j]+1):1;
-    }
-    fp(j,1,m)
-    {
-        pr cur={h[j],j};
-        while(!q.empty()&&cur<q.back())
-            r[q.back().se]=j,q.ppb();
-        q.pb(cur);
-    }
-    for(auto t:q) r[t.se]=m+1;
-    q.clear();
-    fd(j,m,1)
-    {
-        pr cur={h[j],j};
-        while(!q.empty()&&cur<q.back())
-            l[q.back().se]=j,q.ppb();
-        q.pb(cur);
-    }
-    for(auto t:q) l[t.se]=0;
-    q.clear();
-}
-
-void solve()
-{
-    mst(h,0);
-    fp(i,1,n)
-    {
-        init(i);
-        fp(j,1,m)
-        {
-            int w=r[j]-l[j]-1;
-            ans1=max(ans1,min(h[j],w)*min(h[j],w));
-            ans2=max(ans2,w*h[j]);
-        }
-    }
 }
 ```

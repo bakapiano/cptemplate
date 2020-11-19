@@ -11,6 +11,7 @@
         - [2.](#2)
         - [3.](#3)
 - [数据结构](#数据结构)
+    - [一维相交线段 pair 数量](#一维相交线段-pair-数量)
     - [区间 MEX](#区间-mex)
     - [区间 LCM](#区间-lcm)
     - [集合哈希](#集合哈希)
@@ -163,8 +164,10 @@
     - [回文自动机(回文树)](#回文自动机回文树)
         - [PAM 上匹配](#pam-上匹配)
         - [支持首尾添加字符](#支持首尾添加字符)
-    - [Shift-And](#shift-and)
 - [数学 & 数论](#数学--数论)
+    - [BM](#bm)
+    - [康托展开](#康托展开)
+    - [逆康托展开](#逆康托展开)
     - [实数线性规划(单纯形)](#实数线性规划单纯形)
     - [二次剩余](#二次剩余)
     - [斐波那契通项公式](#斐波那契通项公式)
@@ -200,6 +203,7 @@
             - [1.线性基求最大异或和](#1线性基求最大异或和)
             - [2.前缀线性基](#2前缀线性基)
 - [dp](#dp)
+    - [树上联通块 dp(背包)](#树上联通块-dp背包)
     - [树上背包上下界优化 O(nm)](#树上背包上下界优化-onm)
         - [参考](#参考)
         - [模板](#模板-13)
@@ -225,7 +229,6 @@
         - [资料](#资料-8)
         - [模板](#模板-16)
         - [例题](#例题-1)
-    - [传递闭包](#传递闭包)
     - [最小环](#最小环)
         - [无边权](#无边权)
         - [有边权](#有边权)
@@ -280,6 +283,11 @@
     - [最小圆覆盖](#最小圆覆盖)
     - [最小球覆盖](#最小球覆盖)
 - [其他](#其他)
+    - [离线+在线询问 离散化](#离线在线询问-离散化)
+    - [bitset](#bitset)
+        - [可行性背包](#可行性背包)
+        - [传递闭包](#传递闭包)
+        - [Shift-And](#shift-and)
     - [尺取法](#尺取法)
     - [模拟退火](#模拟退火)
     - [unordered_map 防爆](#unordered_map-防爆)
@@ -433,6 +441,10 @@ f = [[0 for i in range(10)] for i in range(10)]
 # 卡常火车头 #
 
 ```cpp
+#pragma GCC target ("avx2,fma")
+#pragma GCC optimize ("O3")
+#pragma GCC optimize ("unroll-loops")
+
 #pragma GCC diagnostic error "-std=c++11"
 #pragma GCC target("avx")
 #pragma GCC optimize(3)
@@ -692,10 +704,19 @@ namespace io {
 
 # 数据结构 #
 
+## 一维相交线段 pair 数量 
+
+树状数组
+
+```cpp
+sort(seg+1,seg+1+q,[](pr a,pr b){return a.fi<b.fi;});
+fp(i,1,q)num+=query(seg[i].fi,seg[i].se-1),update(seg[i].se,1);
+```
+
 ## 区间 MEX ##
 
 权值线段树维护每个数出现的最右位置和区间 $min$，询问时线段树上二分。
-
+ 
 强制在线用主席树
 
 ```cpp
@@ -2647,8 +2668,6 @@ int work()
     return 0;
 }
 ```
-
-
 
 ## RMQ & 二维RMQ (ST表) ##
 
@@ -6297,54 +6316,134 @@ int work()
 }
 ```
 
-## Shift-And
 
-可以处理一些带限制的子串匹配问题，$O(n*m/64)$
 
-[hdu5716](http://acm.hdu.edu.cn/showproblem.php?pid=5716)
+# 数学 & 数论 #
+
+## BM
+
+[Berlekamp-Massey算法简单介绍 -fjzzq](https://www.cnblogs.com/zzqsblog/p/6877339.html)
 
 ```cpp
-int n,m,len;
-char s[MAXN],t[65];
-bitset<N> f,b[65];
-inline int H(char c)
+const int MOD=1e9+7;
+ll qp(ll a,ll b)
 {
-    if(c>='0'&&c<='9')return c-'0'+1;
-    if(c>='a'&&c<='z')return c-'a'+11;
-    if(c>='A'&&c<='Z')return c-'A'+37;
-    return 0;
+    ll x=1; a%=MOD;
+    while(b)
+    {
+        if(b&1) x=x*a%MOD;
+        a=a*a%MOD; b>>=1;
+    }
+    return x;
 }
+const int SZ = 100;
+namespace BM {
+    inline vector<int> BM(vector<int> x)
+    {
+        vector<int> ls,cur;
+        int pn=0,lf,ld;
+        for(int i=0;i<int(x.size());++i)
+        {
+            ll t=-x[i]%MOD;
+            for(int j=0;j<int(cur.size());++j)
+                t=(t+x[i-j-1]*(ll)cur[j])%MOD;
+            if(!t) continue;
+            if(!cur.size())
+            {cur.resize(i+1); lf=i; ld=t; continue;}
+            ll k=-t*qp(ld,MOD-2)%MOD;
+            vector<int> c(i-lf-1); c.pb(-k);
+            for(int j=0;j<int(ls.size());++j) c.pb(ls[j]*k%MOD);
+            if(c.size()<cur.size()) c.resize(cur.size());
+            for(int j=0;j<int(cur.size());++j)
+                c[j]=(c[j]+cur[j])%MOD;
+            if(i-lf+(int)ls.size()>=(int)cur.size())
+                ls=cur,lf=i,ld=t;
+            cur=c;
+        }
+        vector<int>&o=cur;
+        for(int i=0;i<int(o.size());++i)
+            o[i]=(o[i]%MOD+MOD)%MOD;
+        return o;
+    }
+    int N; ll a[SZ],h[SZ],t_[SZ],s[SZ],t[SZ];
+    inline void mull(ll*p,ll*q)
+    {
+        for(int i=0;i<N+N;++i) t_[i]=0;
+        for(int i=0;i<N;++i) if(p[i])
+            for(int j=0;j<N;++j)
+                t_[i+j]=(t_[i+j]+p[i]*q[j])%MOD;
+        for(int i=N+N-1;i>=N;--i) if(t_[i])
+            for(int j=N-1;~j;--j)
+                t_[i-j-1]=(t_[i-j-1]+t_[i]*h[j])%MOD;
+        for(int i=0;i<N;++i) p[i]=t_[i];
+    }
+    inline ll calc(ll K)
+    {
+        for(int i=N;~i;--i) s[i]=t[i]=0;
+        s[0]=1; if(N!=1) t[1]=1; else t[0]=h[0];
+        for(;K;mull(t,t),K>>=1) if(K&1) mull(s,t); ll su=0;
+        for(int i=0;i<N;++i) su=(su+s[i]*a[i])%MOD;
+        return (su%MOD+MOD)%MOD;
+    }
+    inline int gao(vector<int> x,ll n)
+    {
+        if(n<int(x.size())) return x[n];
+        vector<int> v=BM(x); N=v.size(); if(!N) return 0;
+        for(int i=0;i<N;++i) h[i]=v[i],a[i]=x[i];
+        return calc(n);
+    }
+}
+```
+
+## 康托展开
+
+求某个排列的字典序排名
+
+```cpp
+LL c[N];
+inline int lowbit(int x){return x&-x;}
+inline void update(int x,int v){for(int i=x;i<N;i+=lowbit(i))c[i]+=v;}
+inline LL sum(int x,LL s=0){for(int i=x;i;i-=lowbit(i))s+=c[i];return s;}
+int n;
+int a[MAXN];
+LL f[MAXN],ans=0;
 int work()
 {
-    while(gets(s+1))
+    n=read();
+    fp(i,1,n)a[i]=read();
+    f[0]=1;fp(i,1,n)f[i]=f[i-1]*i%MOD;
+    fd(i,n,1)
     {
-        m=strlen(s+1),scanf("%d",&n),mst(b,0);
-        //fp(i,1,62)b[i].reset();
-        fp(i,1,n)
-        {
-            scanf("%d %s",&len,t+1);
-            fp(j,1,len)b[H(t[j])][i]=1;
-        }
-        f.reset(); bool flag=1;
-        fp(i,1,m)
-        {
-            int k=H(s[i]);
-            if(k)
-            {
-                f[0]=1;
-                f<<=1;
-                f&=b[k];
-                if(f[n])printf("%d\n",i-n+1),flag=0;
-            }
-            else f.reset();
-        }
-        if(flag)puts("NULL"); getchar();
+        ans+=sum(a[i]-1)%MOD*(f[n-i])%MOD;
+        ans%=MOD;
+        update(a[i],1);
     }
+    write(ans+1),putchar('\n');
     return 0;
 }
 ```
 
-# 数学 & 数论 #
+## 逆康托展开
+
+根据排名还原排列
+
+```cpp
+vector<int> decantor(LL rank, int n)
+{
+    vector<int> v,a;
+    for(int i=1;i<=n;i++)v.pb(i);
+    for(int i=n;i>=1;i--)
+    {
+        LL r = rank % f[i-1];
+        LL t = rank / f[i-1];
+        rank = r;
+        sort(v.begin(),v.end());
+        a.pb(v[t]);      
+        v.erase(v.begin()+t);   
+    }
+    return a;
+}
+```
 
 ## 实数线性规划(单纯形)
 
@@ -7241,6 +7340,10 @@ int query(int l,int r)
 
 # dp #
 
+## 树上联通块 dp(背包)
+
+
+
 ## 树上背包上下界优化 O(nm) ##
 
 ### 参考 ###
@@ -7966,18 +8069,7 @@ int work()
 ```
 
 
-## 传递闭包 ##
 
-若有关系 a->b 和 b->c，则有关系 a->c
-
-初始给定相邻的关系，求最终的关系矩阵
-
-bitset 优化 floyd，$O(n^3/64)$
-
-```cpp
-fp(k,1,n)fp(i,1,n)
-    if(f[i][k])f[i]|=f[k];
-```
 ## 最小环 ##
 
 ### 无边权
@@ -9848,6 +9940,83 @@ int work()
 ```
 
 # 其他 #
+
+## 离线+在线询问 离散化 ##
+
+给定数组 $a[i]$(可离线)，要求在线询问一些数的离散下标：
+
+将 $a[i]-1,a[i],a[i]+1$ 都插入到数组中离散，询问 $lower_bound$, 等于 $a[i]$ 的数会刚好找到, $a[i-1]<x<a[i]$ 的 $x$ 会被当做 $a[i]-1$。
+
+
+## bitset ##
+
+### 可行性背包
+
+
+### 传递闭包 
+
+若有关系 a->b 和 b->c，则有关系 a->c
+
+初始给定相邻的关系，求最终的关系矩阵
+
+bitset 优化 floyd，$O(n^3/64)$
+
+```cpp
+fp(k,1,n)fp(i,1,n)
+    if(f[i][k])f[i]|=f[k];
+```
+
+
+
+### Shift-And
+
+可以处理一些带限制的子串匹配问题，$O(n*m/64)$
+
+[hdu5716](http://acm.hdu.edu.cn/showproblem.php?pid=5716)
+
+```cpp
+int n,m,len;
+char s[MAXN],t[65];
+bitset<N> f,b[65];
+inline int H(char c)
+{
+    if(c>='0'&&c<='9')return c-'0'+1;
+    if(c>='a'&&c<='z')return c-'a'+11;
+    if(c>='A'&&c<='Z')return c-'A'+37;
+    return 0;
+}
+int work()
+{
+    while(gets(s+1))
+    {
+        m=strlen(s+1),scanf("%d",&n),mst(b,0);
+        //fp(i,1,62)b[i].reset();
+        fp(i,1,n)
+        {
+            scanf("%d %s",&len,t+1);
+            fp(j,1,len)b[H(t[j])][i]=1;
+        }
+        f.reset(); bool flag=1;
+        fp(i,1,m)
+        {
+            int k=H(s[i]);
+            if(k)
+            {
+                f[0]=1;
+                f<<=1;
+                f&=b[k];
+                if(f[n])printf("%d\n",i-n+1),flag=0;
+            }
+            else f.reset();
+        }
+        if(flag)puts("NULL"); getchar();
+    }
+    return 0;
+}
+```
+
+
+
 
 ## 尺取法 ##
 
